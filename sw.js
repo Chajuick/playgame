@@ -1,5 +1,5 @@
 /* PLAYDATE service worker — bump VERSION when shell files change */
-const VERSION = 'playdate-v1';
+const VERSION = 'playdate-v2';
 const SHELL_CACHE = `${VERSION}-shell`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 const IMAGE_CACHE = `${VERSION}-images`;
