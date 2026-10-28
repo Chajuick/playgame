@@ -16,3 +16,10 @@
 - 가격: 2026-10-28 SteamDB 한국 원화(세일가 포함), 2인 가격은 각자 1개씩 구매 가정
 - 최대 인원: PC 온라인 협동 기준, 업데이트에 따라 달라질 수 있음
 - 플레이타임과 점수: 편집자의 주관적 추정
+
+## PWA · 공유 · 검색 설정
+- `manifest.webmanifest`, `sw.js`: 홈 화면 설치, 오프라인 열람(한 번 방문한 뒤)
+- `og-image.png`: 카카오톡 · 디스코드 · X 등 링크 미리보기 이미지(1200×630)
+- `robots.txt`, `sitemap.xml`, JSON-LD 구조화 데이터
+- 배포 주소는 `https://chajuick.github.io/playgame/` 기준. 주소가 바뀌면 `index.html`의 canonical · og:url · og:image, `robots.txt`, `sitemap.xml`을 함께 고칩니다.
+- `index.html`이나 아이콘을 바꾼 뒤에는 `sw.js`의 `VERSION`을 올려야 설치된 앱에도 반영됩니다.

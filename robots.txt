@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chajuick.github.io/playgame/sitemap.xml
