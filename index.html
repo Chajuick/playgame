@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="둘이 하기 좋은 PC 온라인 협동 게임 추천. 한국어 지원 게임 17종의 가격, 플레이타임, 최대 인원, 플레이어 반응을 한눈에 비교하세요.">
+<title>PLAYDATE — 둘이 하는 협동 게임 추천</title>
+<script>
+(function(){var t;try{t=localStorage.getItem('playdate-theme')}catch(e){}
+if(t!=='light'&&t!=='dark')t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+:root{
+  --bg:#f3f4f6;--surface:#fff;--surface-2:#f7f8f9;--surface-3:#fff;
+  --ink:#121418;--ink-2:#353a41;--muted:#69707a;--faint:#9ba1a9;--on-ink:#fff;--ink-hover:#2c3138;
+  --line:#e3e5e9;--line-2:#eef0f2;--line-strong:#c6cad0;--fill:#f1f3f5;
+  --accent:#00b86b;--accent-ink:#00874e;--accent-soft:#e6f7ef;
+  --hero:#0e1014;--warn:#b7791f;--warn-soft:#fdf3e1;--warn-ink:#7a5414;
+  --wrap:1200px;--gnb:60px;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#0d0f12;--surface:#16191e;--surface-2:#1d2026;--surface-3:#2a2e36;
+  --ink:#eceef1;--ink-2:#c4c9d0;--muted:#959ca6;--faint:#6c737d;--on-ink:#111317;--ink-hover:#ffffff;
+  --line:#272b32;--line-2:#20242a;--line-strong:#3a3f48;--fill:#20242a;
+  --accent:#1fcf7f;--accent-ink:#3ddc94;--accent-soft:rgba(31,207,127,.13);
+  --hero:#08090b;--warn:#e0a84a;--warn-soft:rgba(224,168,74,.12);--warn-ink:#e9be72;
+  color-scheme:dark;
+}
+body,.gnb,.panel,.footer,.field{transition:background-color .2s,border-color .2s,color .2s}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.5;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;word-break:keep-all}
+body.locked{overflow:hidden}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+img{display:block;max-width:100%}
+svg{display:block;flex-shrink:0}
+h1,h2,h3,p{margin:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{width:min(var(--wrap),calc(100% - 48px));margin-inline:auto}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- GNB ---------- */
+.gnb{position:sticky;top:0;z-index:60;background:var(--surface);border-bottom:1px solid var(--line)}
+.gnb-in{height:var(--gnb);display:flex;align-items:center;gap:36px}
+.logo{display:flex;align-items:center;gap:8px;font-size:19px;font-weight:800;letter-spacing:-.03em;flex:none}
+.logo-mark{width:22px;height:22px;border-radius:6px;background:var(--ink);display:grid;place-items:center}
+.logo-mark i{width:8px;height:8px;border-radius:2px;background:var(--accent)}
+.logo small{font-size:11px;font-weight:600;color:var(--faint);letter-spacing:0;margin-left:2px}
+.gnb-nav{display:flex;height:100%;gap:28px}
+.gnb-nav a{position:relative;display:flex;align-items:center;font-size:15px;font-weight:600;color:var(--muted);white-space:nowrap}
+.gnb-nav a:hover{color:var(--ink)}
+.gnb-nav a.on{color:var(--ink);font-weight:700}
+.gnb-nav a.on::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--ink)}
+.gnb-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.gnb-search{display:flex;align-items:center;gap:8px;width:260px;height:38px;padding:0 14px;border-radius:19px;background:var(--fill);color:var(--faint)}
+.gnb-search:focus-within{background:var(--surface);box-shadow:inset 0 0 0 1px var(--ink)}
+.gnb-search input{border:0;outline:0;background:none;width:100%;min-width:0;font-size:14px;color:var(--ink)}
+.gnb-search input::placeholder{color:var(--faint)}
+.saved-btn{display:flex;align-items:center;gap:6px;height:38px;padding:0 14px;border-radius:19px;border:1px solid var(--line);font-size:14px;font-weight:600;white-space:nowrap}
+.saved-btn:hover{border-color:var(--line-strong)}
+.theme-btn{width:38px;height:38px;border:1px solid var(--line);color:var(--ink-2)}
+.theme-btn:hover{background:var(--fill)}
+.theme-btn .sun{display:none}
+[data-theme="dark"] .theme-btn .sun{display:block}
+[data-theme="dark"] .theme-btn .moon{display:none}
+.saved-btn .count{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--ink);color:var(--on-ink);font-size:12px;font-weight:700;display:grid;place-items:center}
+
+/* ---------- Hero ---------- */
+.hero{background:var(--hero);padding:28px 0 32px}
+.hero-in{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px}
+.stage{position:relative;height:430px;border-radius:12px;overflow:hidden;background:#1b1e24}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s}
+.slide.on{opacity:1;visibility:visible}
+.slide>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.slide::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,9,12,.86) 0%,rgba(8,9,12,.55) 38%,rgba(8,9,12,0) 72%),linear-gradient(0deg,rgba(8,9,12,.6) 0%,rgba(8,9,12,0) 45%)}
+.slide-copy{position:absolute;z-index:2;left:40px;bottom:40px;max-width:min(470px,calc(100% - 80px));color:#fff}
+.slide-badge{display:inline-block;padding:4px 8px;border-radius:4px;background:var(--accent);font-size:12px;font-weight:700}
+.slide-copy h2{margin-top:14px;font-size:38px;line-height:1.2;font-weight:800;letter-spacing:-.04em}
+.slide-en{margin-top:4px;font-size:13px;color:rgba(255,255,255,.55);font-weight:500}
+.slide-pitch{margin-top:14px;font-size:16px;line-height:1.6;color:rgba(255,255,255,.86)}
+.slide-meta{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:rgba(255,255,255,.62)}
+.slide-meta b{color:#fff;font-weight:700}
+.slide-actions{margin-top:24px;display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:44px;padding:0 20px;border-radius:8px;font-size:14px;font-weight:700;white-space:nowrap;transition:background .15s,border-color .15s,color .15s}
+.btn-light{background:#fff;color:#121418}
+.btn-light:hover{background:#e9ebee}
+.btn-ghost{color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.32)}
+.btn-ghost:hover{background:rgba(255,255,255,.1)}
+.btn-ghost[aria-pressed="true"] svg{fill:currentColor}
+.btn-dark{background:var(--ink);color:var(--on-ink)}
+.btn-dark:hover{background:var(--ink-hover)}
+.btn-dark:disabled{background:var(--line);color:var(--faint);cursor:not-allowed}
+.btn-line{color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.btn-line:hover{box-shadow:inset 0 0 0 1px var(--line-strong)}
+.btn-line[aria-pressed="true"]{color:var(--accent-ink);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-soft)}
+.btn-line[aria-pressed="true"] svg{fill:currentColor}
+.dots{position:absolute;z-index:3;right:20px;bottom:20px;display:none;gap:6px}
+.dots button{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.4);transition:width .2s}
+.dots button.on{width:18px;background:#fff}
+.hero-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.hero-item{position:relative;width:100%;display:grid;grid-template-columns:104px 1fr;gap:12px;align-items:center;padding:10px;border-radius:8px;text-align:left;color:rgba(255,255,255,.55);transition:background .15s,color .15s}
+.hero-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85)}
+.hero-item.on{background:rgba(255,255,255,.09);color:#fff}
+.hero-item .thumb{border-radius:5px;aspect-ratio:16/9}
+.hero-item strong{display:block;font-size:14px;font-weight:700;line-height:1.35}
+.hero-item small{display:block;margin-top:3px;font-size:12px;opacity:.75}
+.hero-item .bar{position:absolute;left:10px;right:10px;bottom:0;height:2px;border-radius:1px;overflow:hidden}
+.hero-item.on .bar::after{content:'';display:block;height:100%;background:var(--accent);animation:fill 6s linear forwards}
+.hero.paused .hero-item.on .bar::after{animation-play-state:paused}
+@keyframes fill{from{width:0}to{width:100%}}
+
+/* ---------- Thumbs ---------- */
+.thumb{position:relative;overflow:hidden;background:#262a31;aspect-ratio:16/9}
+.thumb::before{content:attr(data-name);position:absolute;inset:0;display:grid;place-items:center;padding:12px;text-align:center;color:rgba(255,255,255,.5);font-size:13px;font-weight:700}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .35s}
+img.broken{display:none!important}
+
+/* ---------- Layout / Panels ---------- */
+.home{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;margin-top:28px;align-items:stretch}
+.home-main{display:flex;flex-direction:column;gap:24px;min-width:0}
+.panel{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px}
+.panel-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px}
+.panel-head h2{font-size:20px;font-weight:800;letter-spacing:-.035em}
+.panel-head p{margin-top:4px;font-size:13px;color:var(--muted)}
+.more{display:flex;align-items:center;gap:2px;font-size:13px;color:var(--muted);white-space:nowrap}
+.more:hover{color:var(--ink)}
+
+/* Editor picks */
+.picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.pick{display:block;text-align:left;width:100%}
+.pick .thumb{border-radius:8px}
+.pick:hover .thumb img{transform:scale(1.035)}
+.pick-why{margin-top:12px;font-size:12px;font-weight:700;color:var(--accent-ink)}
+.pick strong{display:block;margin-top:4px;font-size:16px;font-weight:700;letter-spacing:-.03em}
+.pick:hover strong{text-decoration:underline;text-underline-offset:3px}
+.pick p{margin-top:4px;font-size:13px;color:var(--muted);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* Budget shelf */
+.shelf{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.mini{display:block;text-align:left;width:100%;min-width:0}
+.mini .thumb{border-radius:6px}
+.mini:hover .thumb img{transform:scale(1.035)}
+.mini strong{display:block;margin-top:10px;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini span{display:block;margin-top:2px;font-size:13px;color:var(--muted)}
+.mini span b{color:var(--ink);font-weight:700}
+
+/* Ranking */
+.aside{display:flex;flex-direction:column;min-width:0}
+.rank-panel{flex:1;display:flex;flex-direction:column;padding:22px 0 12px}
+.rank-panel .panel-head{padding:0 22px;margin-bottom:12px;align-items:center}
+.seg{display:inline-flex;padding:3px;border-radius:8px;background:var(--fill)}
+.seg button{height:28px;padding:0 11px;border-radius:6px;font-size:13px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface-3);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.rank-list{flex:1;display:flex;flex-direction:column;justify-content:space-between;list-style:none;margin:0;padding:0}
+.rank-row{width:100%;display:grid;grid-template-columns:22px 72px minmax(0,1fr) auto;gap:12px;align-items:center;padding:9px 22px;text-align:left}
+.rank-row:hover{background:var(--surface-2)}
+.rank-num{font-size:16px;font-weight:800;color:var(--faint);text-align:center;font-variant-numeric:tabular-nums}
+.rank-row.top .rank-num{color:var(--accent-ink)}
+.rank-row .thumb{border-radius:4px}
+.rank-row strong{display:block;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-row small{display:block;margin-top:1px;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-price{font-size:13px;font-weight:700;white-space:nowrap;text-align:right}
+.rank-price em{display:block;font-style:normal;font-size:11px;font-weight:500;color:var(--faint)}
+.criteria{display:flex;flex-wrap:wrap;align-items:center;gap:10px 28px;padding:18px 24px}
+.criteria h3{font-size:14px;font-weight:800}
+.criteria ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px 22px}
+.criteria li{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-2)}
+.criteria li svg{color:var(--accent)}
+.criteria p{flex-basis:100%;padding-top:10px;border-top:1px solid var(--line-2);font-size:12px;color:var(--faint);line-height:1.6}
+
+/* ---------- Explore ---------- */
+.explore{margin:24px 0 56px;scroll-margin-top:calc(var(--gnb) + 12px)}
+.explore .panel-head{margin-bottom:6px}
+.tabs{display:flex;gap:24px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;height:46px;font-size:15px;font-weight:600;color:var(--muted);white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);font-weight:700}
+.tab[aria-selected="true"]::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--ink)}
+.tab .n{margin-left:4px;font-size:13px;font-weight:600;color:var(--faint)}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:16px 0 20px}
+.field{display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.field:focus-within{border-color:var(--ink)}
+.field.search{flex:1;min-width:200px;max-width:300px;color:var(--faint)}
+.field input{border:0;outline:0;background:none;width:100%;min-width:0;font-size:14px;color:var(--ink)}
+.field input::placeholder{color:var(--faint)}
+select.field{appearance:none;-webkit-appearance:none;padding-right:32px;font-size:14px;font-weight:500;color:var(--ink-2);cursor:pointer;background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2369707a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center}
+.check{display:flex;align-items:center;gap:6px;height:38px;font-size:14px;color:var(--ink-2);cursor:pointer;white-space:nowrap}
+.check input{width:16px;height:16px;margin:0;accent-color:var(--ink);cursor:pointer}
+.toolbar .spacer{flex:1}
+.result{font-size:13px;color:var(--muted);white-space:nowrap}
+.result b{color:var(--ink)}
+.reset{display:flex;align-items:center;gap:4px;height:38px;font-size:13px;color:var(--muted)}
+.reset:hover{color:var(--ink)}
+
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 20px}
+.card{min-width:0;display:flex;flex-direction:column}
+.card-media{position:relative;display:block;width:100%;border-radius:8px;overflow:hidden}
+.card-media:hover img{transform:scale(1.035)}
+.badges{position:absolute;z-index:2;left:8px;top:8px;display:flex;gap:4px}
+.badge{padding:3px 6px;border-radius:4px;font-size:11px;font-weight:700;line-height:1.3;background:rgba(14,16,20,.82);color:#fff}
+.badge.free{background:var(--accent)}
+.badge.early{background:#fff;color:var(--warn)}
+.heart{position:absolute;z-index:2;right:8px;top:8px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(14,16,20,.5);color:#fff;transition:background .15s,transform .15s}
+.heart:hover{background:rgba(14,16,20,.75)}
+.heart svg{width:17px;height:17px}
+.heart[aria-pressed="true"]{background:#fff;color:#e5484d}
+.heart[aria-pressed="true"] svg{fill:currentColor}
+.card-body{padding-top:12px;display:flex;flex-direction:column;flex:1}
+.card-cat{font-size:12px;color:var(--muted)}
+.card-cat .pl{color:var(--ink-2);font-weight:600}
+.card-title{margin-top:3px;font-size:16px;font-weight:700;letter-spacing:-.03em;line-height:1.35;text-align:left}
+.card-title:hover{text-decoration:underline;text-underline-offset:3px}
+.card-pitch{margin-top:4px;font-size:13px;color:var(--muted);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-foot{margin-top:auto;padding-top:12px;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.price{display:flex;align-items:baseline;gap:5px;flex-wrap:wrap;font-size:15px;font-weight:800;letter-spacing:-.02em}
+.price .off{font-size:13px;font-weight:800;color:var(--accent-ink)}
+.price small{font-size:12px;font-weight:500;color:var(--faint);letter-spacing:0}
+.hours{font-size:12px;color:var(--muted);white-space:nowrap}
+.empty{grid-column:1/-1;padding:64px 20px;text-align:center;border:1px dashed var(--line);border-radius:12px}
+.empty strong{display:block;font-size:16px}
+.empty p{margin:6px 0 18px;font-size:13px;color:var(--muted)}
+
+/* ---------- Footer ---------- */
+.footer{background:var(--surface);border-top:1px solid var(--line);padding:32px 0 44px;color:var(--muted);font-size:12px;line-height:1.75}
+.footer-in{display:grid;grid-template-columns:260px 1fr;gap:40px}
+.footer .logo{font-size:16px;color:var(--ink)}
+.footer .about{margin-top:10px}
+.footer ul{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+.footer li{position:relative;padding-left:10px}
+.footer li::before{content:'';position:absolute;left:0;top:.8em;width:3px;height:3px;border-radius:50%;background:var(--faint)}
+.copy{margin-top:16px;color:var(--faint)}
+
+/* ---------- Overlays ---------- */
+.scrim{position:fixed;inset:0;z-index:100;background:rgba(10,12,15,.55);opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
+.scrim.show{opacity:1;visibility:visible}
+.icon-btn{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--ink-2)}
+.icon-btn:hover{background:var(--fill)}
+
+.drawer{position:fixed;z-index:110;top:0;right:0;bottom:0;width:min(400px,100%);background:var(--surface);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease;box-shadow:-12px 0 40px rgba(0,0,0,.12)}
+.drawer.open{transform:none}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:18px 16px 16px 22px;border-bottom:1px solid var(--line)}
+.drawer-head h2{font-size:18px;font-weight:800}
+.drawer-head h2 span{margin-left:4px;color:var(--accent-ink)}
+.drawer-body{flex:1;overflow-y:auto;padding:6px 22px}
+.saved-row{display:grid;grid-template-columns:88px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line-2)}
+.saved-row .thumb{border-radius:5px}
+.saved-row button.name{display:block;text-align:left;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.saved-row button.name:hover{text-decoration:underline}
+.saved-row small{display:block;margin-top:2px;font-size:12px;color:var(--muted)}
+.saved-empty{padding:72px 10px;text-align:center;color:var(--muted)}
+.saved-empty svg{margin:0 auto 14px;color:var(--faint)}
+.saved-empty strong{display:block;color:var(--ink);font-size:15px;margin-bottom:6px}
+.saved-empty p{font-size:13px;line-height:1.7}
+.drawer-foot{padding:16px 22px max(20px,env(safe-area-inset-bottom));border-top:1px solid var(--line);display:grid;gap:8px}
+.total{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:13px;color:var(--muted)}
+.total b{font-size:18px;color:var(--ink);letter-spacing:-.02em}
+.drawer-foot .btn{width:100%}
+.drawer-note{margin-top:4px;font-size:12px;color:var(--faint);text-align:center}
+
+.modal{position:fixed;z-index:120;inset:0;display:none;align-items:center;justify-content:center;padding:24px}
+.modal.open{display:flex}
+.modal-panel{position:relative;width:min(980px,100%);max-height:min(92dvh,900px);overflow-y:auto;background:var(--surface);border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.25)}
+.modal-close{position:absolute;z-index:5;top:12px;right:12px;background:var(--surface)}
+.m-top{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:28px;padding:28px}
+.viewer .thumb{border-radius:8px}
+.viewer-thumbs{margin-top:8px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.viewer-thumbs button{position:relative;border-radius:5px;overflow:hidden;opacity:.55;transition:opacity .15s}
+.viewer-thumbs button:hover{opacity:.85}
+.viewer-thumbs button[aria-current="true"]{opacity:1;box-shadow:inset 0 0 0 2px var(--ink)}
+.viewer-thumbs button[aria-current="true"] .thumb{outline:2px solid var(--ink);outline-offset:-2px}
+.m-info{min-width:0;padding-right:28px}
+.m-cat{font-size:13px;color:var(--muted)}
+.m-info h2{margin-top:4px;font-size:28px;font-weight:800;letter-spacing:-.04em;line-height:1.25}
+.m-en{margin-top:2px;font-size:13px;color:var(--faint)}
+.m-pitch{margin-top:14px;font-size:15px;font-weight:600;line-height:1.55;color:var(--ink-2)}
+.m-tags{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
+.m-tags span{padding:4px 9px;border-radius:4px;background:var(--fill);font-size:12px;color:var(--ink-2)}
+.facts{margin:20px 0 0;display:grid;border-top:1px solid var(--line)}
+.facts div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0;border-bottom:1px solid var(--line-2)}
+.facts dt{font-size:13px;color:var(--muted)}
+.facts dd{margin:0;font-size:14px;font-weight:700;text-align:right}
+.facts dd small{display:block;font-size:11px;font-weight:500;color:var(--faint)}
+.facts .off{margin-right:4px;color:var(--accent-ink)}
+.scores{margin-top:16px;display:grid;gap:8px}
+.score{display:grid;grid-template-columns:48px 1fr 24px;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+.score b{text-align:right;color:var(--ink);font-weight:700}
+.pips{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.pips i{height:6px;border-radius:2px;background:var(--line-2)}
+.pips i.on{background:var(--ink)}
+.m-actions{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.m-actions .btn{width:100%}
+.m-bottom{border-top:1px solid var(--line);padding:24px 28px 30px;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:28px}
+.m-bottom h3{font-size:15px;font-weight:800;margin-bottom:10px}
+.m-desc{font-size:14px;line-height:1.8;color:var(--ink-2)}
+.notice{margin-top:16px;display:flex;gap:8px;padding:12px 14px;border-radius:8px;background:var(--warn-soft);color:var(--warn-ink);font-size:13px;line-height:1.6}
+.notice svg{margin-top:2px}
+.reviews{display:grid;gap:10px}
+.review{padding:14px 16px;border-radius:8px;background:var(--surface-2)}
+.review-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.review-top strong{font-size:12px;font-weight:700}
+.review-top a{font-size:12px;color:var(--muted);white-space:nowrap}
+.review-top a:hover{color:var(--ink);text-decoration:underline}
+.review p{margin-top:6px;font-size:13px;line-height:1.65;color:var(--ink-2)}
+
+.toast{position:fixed;z-index:150;left:50%;bottom:32px;transform:translate(-50%,12px);opacity:0;visibility:hidden;transition:all .2s;background:var(--ink);color:var(--on-ink);border-radius:8px;padding:12px 18px;font-size:14px;font-weight:600;box-shadow:0 8px 28px rgba(0,0,0,.2);max-width:calc(100% - 32px);text-align:center}
+.toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+
+/* ---------- Responsive ---------- */
+@media(max-width:1100px){
+  .hero-in{grid-template-columns:1fr}
+  .hero-list{display:none}
+  .dots{display:flex}
+  .home{grid-template-columns:minmax(0,1fr)}
+  .aside{display:block}
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:780px){
+  :root{--gnb:52px}
+  .wrap{width:calc(100% - 32px)}
+  .gnb-in{height:auto;flex-wrap:wrap;gap:0}
+  .logo{height:var(--gnb)}
+  .gnb-right{height:var(--gnb)}
+  .gnb-search{display:none}
+  .gnb-nav{order:3;width:100%;height:42px;gap:22px;overflow-x:auto;scrollbar-width:none}
+  .gnb-nav::-webkit-scrollbar{display:none}
+  .gnb-nav a{font-size:14px}
+  .hero{padding:0 0 20px}
+  .hero .wrap{width:100%}
+  .stage{height:400px;border-radius:0}
+  .slide::after{background:linear-gradient(0deg,rgba(8,9,12,.92) 0%,rgba(8,9,12,.55) 50%,rgba(8,9,12,.1) 100%)}
+  .slide-copy{left:20px;right:20px;bottom:28px;max-width:none}
+  .slide-copy h2{font-size:28px;margin-top:10px}
+  .slide-pitch{font-size:14px;margin-top:10px}
+  .slide-meta{font-size:12px}
+  .slide-actions{margin-top:18px}
+  .dots{right:20px;bottom:auto;top:20px}
+  .home{margin-top:16px;gap:16px}
+  .home-main{gap:16px}
+  .panel{padding:20px 16px;border-radius:10px}
+  .rank-panel{padding:20px 0 8px}
+  .rank-panel .panel-head{padding:0 16px}
+  .rank-row{padding:9px 16px}
+  .criteria{padding:18px 16px}
+  .panel-head h2{font-size:18px}
+  .picks,.shelf{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -16px;padding:0 16px;gap:12px}
+  .picks::-webkit-scrollbar,.shelf::-webkit-scrollbar{display:none}
+  .pick{flex:0 0 72%;scroll-snap-align:start}
+  .mini{flex:0 0 40%;scroll-snap-align:start}
+  .explore{margin:16px 0 40px}
+  .toolbar{gap:8px}
+  .field.search{max-width:none;flex-basis:100%}
+  .toolbar .spacer{display:none}
+  .result{width:100%;order:9}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 12px}
+  .footer-in{grid-template-columns:1fr;gap:20px}
+  .modal{padding:0;align-items:flex-end}
+  .modal-panel{max-height:94dvh;border-radius:14px 14px 0 0}
+  .m-top,.m-bottom{grid-template-columns:1fr;gap:20px;padding:20px 16px}
+  .m-top{padding-top:56px}
+  .m-info{padding-right:0}
+  .m-info h2{font-size:24px}
+  .m-bottom{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
+}
+@media(max-width:420px){
+  .card-pitch{display:none}
+  .card-title{font-size:15px}
+  .price{font-size:14px}
+  .saved-btn .label{display:none}
+  .pick{flex-basis:82%}
+  .mini{flex-basis:46%}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="gnb">
+  <div class="wrap gnb-in">
+    <a href="#top" class="logo" aria-label="PLAYDATE 홈"><span class="logo-mark" aria-hidden="true"><i></i></span>PLAYDATE<small>2인 협동 게임</small></a>
+    <nav class="gnb-nav" aria-label="주 메뉴">
+      <a href="#top" data-nav="home" class="on">홈</a>
+      <a href="#ranking" data-nav="ranking">추천 랭킹</a>
+      <a href="#explore" data-nav="explore">전체 게임</a>
+      <a href="#saved" data-open-saved>찜 목록</a>
+    </nav>
+    <div class="gnb-right">
+      <label class="gnb-search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="gsearch" type="search" autocomplete="off" placeholder="게임 이름, 장르 검색" aria-label="게임 검색"></label>
+      <button class="icon-btn theme-btn" type="button" id="themeBtn" aria-label="다크 모드로 전환"><svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg><svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+      <button class="saved-btn" type="button" data-open-saved><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg><span class="label">찜 목록</span><span class="count" id="savedCount">0</span></button>
+    </div>
+  </div>
+</header>
+
+<div id="top">
+  <section class="hero" id="hero" aria-roledescription="carousel" aria-label="에디터 추천 게임">
+    <div class="wrap hero-in">
+      <div class="stage" id="stage"></div>
+      <ol class="hero-list" id="heroList"></ol>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <div class="home">
+      <div class="home-main">
+        <section class="panel" aria-labelledby="picksTitle">
+          <div class="panel-head"><div><h2 id="picksTitle">에디터 픽</h2><p>이런 날엔 이 게임을 추천해요</p></div></div>
+          <div class="picks" id="picks"></div>
+        </section>
+        <section class="panel" aria-labelledby="shelfTitle">
+          <div class="panel-head"><div><h2 id="shelfTitle">둘이 합쳐 3만 원 이하</h2><p>두 계정을 모두 사도 부담 없는 게임</p></div><a class="more" href="#explore" data-budget-link="30000">더 보기<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></div>
+          <div class="shelf" id="shelf"></div>
+        </section>
+        <section class="panel criteria">
+          <h3>선정 기준</h3>
+          <ul>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg>PC에서 온라인 2인 협동 가능</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg>한국어 지원</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg>마인크래프트·팰월드처럼 탐험하고 짓는 재미</li>
+          </ul>
+          <p>가격은 2026.10.28 SteamDB 한국 원화 기준(세일가 포함)이며, 2인 가격은 각자 1개씩 구매하는 경우예요.</p>
+        </section>
+      </div>
+
+      <aside class="aside" id="ranking" aria-label="추천 랭킹">
+        <section class="panel rank-panel">
+          <div class="panel-head"><h2>추천 랭킹</h2><div class="seg" role="group" aria-label="랭킹 그래픽 필터" id="rankSeg"><button type="button" data-rank-dim="all" aria-pressed="true">전체</button><button type="button" data-rank-dim="3D" aria-pressed="false">3D</button><button type="button" data-rank-dim="2D" aria-pressed="false">2D</button></div></div>
+          <ol class="rank-list" id="rankList"></ol>
+        </section>
+      </aside>
+    </div>
+
+    <section class="panel explore" id="explore" aria-labelledby="exploreTitle">
+      <div class="panel-head"><div><h2 id="exploreTitle">전체 게임</h2><p>장르와 예산으로 둘에게 맞는 게임을 찾아보세요</p></div></div>
+      <div class="tabs" role="tablist" aria-label="게임 성향" id="focusTabs">
+        <button class="tab" role="tab" type="button" data-focus="all" aria-selected="true">전체<span class="n"></span></button>
+        <button class="tab" role="tab" type="button" data-focus="adventure" aria-selected="false">모험 · 탐험<span class="n"></span></button>
+        <button class="tab" role="tab" type="button" data-focus="balance" aria-selected="false">모험 + 생활<span class="n"></span></button>
+        <button class="tab" role="tab" type="button" data-focus="town" aria-selected="false">마을 · 꾸미기<span class="n"></span></button>
+      </div>
+      <div class="toolbar">
+        <label class="field search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="search" type="search" autocomplete="off" placeholder="이름, 키워드" aria-label="게임 이름이나 키워드 검색"></label>
+        <select class="field" id="dimSel" aria-label="그래픽"><option value="all">그래픽 전체</option><option value="3D">3D</option><option value="2D">2D</option></select>
+        <select class="field" id="budgetSel" aria-label="2인 예산"><option value="all">2인 예산 전체</option><option value="0">무료</option><option value="30000">3만 원 이하</option><option value="50000">5만 원 이하</option><option value="70000">7만 원 이하</option></select>
+        <select class="field" id="partySel" aria-label="최대 인원"><option value="all">인원 전체</option><option value="4">최대 4인</option><option value="5">5인 이상 가능</option><option value="8">8인 이상 가능</option></select>
+        <label class="check"><input id="onlyLiked" type="checkbox"> 찜한 게임만</label>
+        <span class="spacer"></span>
+        <select class="field" id="sortSel" aria-label="정렬"><option value="rank">추천순</option><option value="price">2인 가격 낮은순</option><option value="players">최대 인원 많은순</option><option value="adventure">탐험 비중순</option><option value="home">꾸미기 비중순</option><option value="cute">귀여운순</option></select>
+        <button class="reset" type="button" id="reset"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>초기화</button>
+        <span class="result" id="result" aria-live="polite"></span>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+  </main>
+</div>
+
+<footer class="footer">
+  <div class="wrap footer-in">
+    <div>
+      <span class="logo"><span class="logo-mark" aria-hidden="true"><i></i></span>PLAYDATE</span>
+      <p class="about">둘이 함께 할 다음 게임을 고르는 곳.<br>탐험하고, 짓고, 같이 돌아올 집이 있는 게임을 모읍니다.</p>
+    </div>
+    <div>
+      <ul>
+        <li>가격은 2026.10.28 SteamDB 한국 원화 조회 기준(세일 포함)이며, 2인 가격은 각 1개씩 구매하는 가정입니다.</li>
+        <li>최대 인원은 PC 온라인 협동 기준이며, 업데이트에 따라 달라질 수 있습니다.</li>
+        <li>예상 플레이타임과 탐험·꾸미기·귀여움 점수는 편집자의 주관적인 추정으로, 공식 집계가 아닙니다.</li>
+        <li>플레이어 반응은 이용자 의견을 간추린 것이며 원문 링크를 함께 표시합니다. 구매 전 스토어에서 할인과 지원 기능을 다시 확인해 주세요.</li>
+        <li>게임 이미지는 각 스토어와 공개 자료에서 불러오며, 저작권은 원 권리자에게 있습니다.</li>
+      </ul>
+      <p class="copy">PLAYDATE · 개인 비영리 추천 페이지</p>
+    </div>
+  </div>
+</footer>
+
+<div id="scrim" class="scrim" aria-hidden="true"></div>
+<aside id="drawer" class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" aria-hidden="true">
+  <div class="drawer-head"><h2 id="drawerTitle">찜 목록<span id="drawerCount"></span></h2><button class="icon-btn" type="button" id="closeSaved" aria-label="찜 목록 닫기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-body" id="savedList"></div>
+  <div class="drawer-foot">
+    <div class="total"><span>2인 합계</span><b id="savedTotal">0원</b></div>
+    <button class="btn btn-dark" id="shareList" type="button" disabled>목록 복사해서 공유하기</button>
+    <button class="btn btn-line" id="drawRandom" type="button">찜한 게임 중 하나 골라주기</button>
+    <p class="drawer-note">찜 목록은 이 브라우저에만 저장돼요.</p>
+  </div>
+</aside>
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal-panel" id="modalPanel">
+    <button id="closeModal" class="icon-btn modal-close" type="button" aria-label="닫기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+'use strict';
+const games=[{"id":"2408820","name":"루마 아일랜드","en":"Luma Island","dim":"3D","focus":"balance","rank":1,"adventure":5,"home":4,"cute":5,"tags":["탐험","농장","펫","신전·퍼즐"],"pitch":"귀여운 섬을 개척하며 보물과 비밀을 찾아보자","detail":"농장을 가꾸고 귀여운 루마를 키우며 정글과 동굴, 고대 신전을 탐험해. 모험과 여유로운 생활이 골고루 섞였어.","note":"전투보다는 채집·퍼즐·탐험의 비중이 커.","emoji":"🏝️","free":false,"early":false,"link":"https://store.steampowered.com/app/2408820/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2408820/header.jpg","art":"#e6e2ed","symbol":"↔","price":20500,"discount":0,"hours":"25–50시간","screenshot":"https://images.steamusercontent.com/ugc/16095755133010054651/1B8B2E25A02C1F40ACC8A026AFC9D251E6A63F6A/?ima=fit&imcolor=%23000000&impolicy=Letterbox&imw=1024&letterbox=false","gallery":["https://images.steamusercontent.com/ugc/16095755133010054651/1B8B2E25A02C1F40ACC8A026AFC9D251E6A63F6A/?ima=fit&imcolor=%23000000&impolicy=Letterbox&imw=1024&letterbox=false","https://www.4gamer.net/games/780/G078037/20241120061/SS/001.jpg"],"reviews":[{"who":"공식 한국어 평가","text":"한국어 이용자 평가 782개 중 약 82% 긍정적. 잔잔한 농장과 탐험의 조합이 강점.","url":"https://store.steampowered.com/app/2408820/?l=koreana"}],"priceSource":"https://steamdb.info/app/2408820/"},{"id":"lego","name":"레고 포트나이트 오디세이","en":"LEGO Fortnite Odyssey","dim":"3D","focus":"balance","rank":2,"adventure":5,"home":4,"cute":5,"tags":["무료","오픈월드","마을 건설","보스"],"pitch":"레고 세계에서 우리만의 마을을 만들고 모험하자","detail":"동굴을 탐험하고 장비를 만들고 몬스터와 싸우면서 주민들과 마을도 발전시키는 생존 크래프팅 게임.","note":"포트나이트(에픽 계정)에서 실행해야 해.","emoji":"🧱","free":true,"early":false,"link":"https://www.fortnite.com/@epic/lego-fortnite-odyssey?lang=ko","image":"https://www.lego.com/cdn/cs/set/assets/blt3fe6c00a280d0116/LF_article_GU_best_village_1200x675_article_Image1_.png?dpr=1&fit=crop&quality=80&width=700","art":"#e6e2ed","symbol":"↔","price":0,"discount":0,"hours":"30–100시간+","screenshot":"https://image.api.playstation.com/vulcan/ap/rnd/202604/1609/dda194813c2f6c9eb174658db9db70ee3f8e113e0ad9ab0a.jpg","gallery":["https://image.api.playstation.com/vulcan/ap/rnd/202604/1609/dda194813c2f6c9eb174658db9db70ee3f8e113e0ad9ab0a.jpg"],"reviews":[{"who":"공식 게임 안내","text":"동굴 탐험, 마을 확장, 아이템 제작을 혼자 또는 친구와 즐길 수 있는 무료 콘텐츠.","url":"https://www.epicgames.com/help/c-44968506/c-35977123/lego-fortnite-odyssey-a22047267"}],"priceSource":"https://www.fortnite.com/@epic/lego-fortnite-odyssey"},{"id":"2230110","name":"페이 팜","en":"Fae Farm","dim":"3D","focus":"balance","rank":3,"adventure":3,"home":5,"cute":5,"tags":["마법","던전","농장","꾸미기"],"pitch":"동화책 같은 마법 세계에서 함께 농사와 모험","detail":"작고 귀여운 캐릭터로 집을 꾸미고 마법을 익히며 신비한 던전을 탐험해. 따뜻한 판타지 분위기가 장점.","note":"깊은 전투나 RPG 성장보다는 생활 콘텐츠 중심. 별도 계정 요구 가능.","emoji":"🧚","free":false,"early":false,"link":"https://store.steampowered.com/app/2230110/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2230110/header.jpg","art":"#e6e2ed","symbol":"↔","price":33000,"discount":0,"hours":"30–60시간","screenshot":"https://www.gamereactor.eu/media/85/faefarm_4098513b.jpg","gallery":["https://www.gamereactor.eu/media/85/faefarm_4098513b.jpg","https://cdn.mos.cms.futurecdn.net/JUVGjVA7pEHCnLkhjiRbVB.jpg"],"reviews":[{"who":"Steam 이용자 평가","text":"전체 약 2,700개 평가에서 긍정 비율 약 78%. 귀여운 농장과 마법 세계가 특징.","url":"https://store.steampowered.com/app/2230110/?l=koreana"}],"priceSource":"https://steamdb.info/app/2230110/"},{"id":"1062520","name":"딩컴","en":"Dinkum","dim":"3D","focus":"town","rank":4,"adventure":3,"home":5,"cute":5,"tags":["마을 개척","낚시","광산","야생동물"],"pitch":"아무것도 없는 섬에 둘만의 작은 마을을","detail":"집과 상점을 세우고, 낚시와 농사를 하며 호주풍 섬을 개발하는 게임. 광산 탐험과 사냥도 즐길 수 있어.","note":"강한 보스전보다 마을 성장과 생활이 중심.","emoji":"🌼","free":false,"early":false,"link":"https://store.steampowered.com/app/1062520/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1062520/header.jpg","art":"#eee5dc","symbol":"⌂","price":24000,"discount":0,"hours":"40–100시간+","screenshot":"https://cdn.cloudflare.steamstatic.com/steam/apps/1062520/ss_75f7bdf2f8f3b0b017be92f3c90b865e2f6a539b.1920x1080.jpg","gallery":["https://cdn.cloudflare.steamstatic.com/steam/apps/1062520/ss_75f7bdf2f8f3b0b017be92f3c90b865e2f6a539b.1920x1080.jpg","https://cdn.cloudflare.steamstatic.com/steam/apps/1062520/ss_190601d9bdd6bd303772e5da805f7159c56dc488.1920x1080.jpg"],"reviews":[{"who":"커뮤니티 · 2인 플레이","text":"둘이 함께 농사·채광하는 재미는 좋지만, 마을 배치 등 일부 권한은 호스트에게 집중된다는 의견.","url":"https://www.reddit.com/r/Dinkum/comments/1kbqdm9/how_is_this_as_a_two_player_onlycouples_game/"},{"who":"커뮤니티 · 장단점","text":"협동 탐험과 다양한 생활 활동은 호평. NPC 관계의 얕음과 반복 자원 파밍은 아쉽다는 의견.","url":"https://www.reddit.com/r/CozyGamers/comments/1ai2ol3"}],"priceSource":"https://steamdb.info/app/1062520/"},{"id":"1660080","name":"알로프트","en":"Aloft","dim":"3D","focus":"adventure","rank":5,"adventure":5,"home":4,"cute":4,"tags":["하늘섬","비행","건축","생존"],"pitch":"하늘을 나는 섬을 집으로 만들어 여행하자","detail":"떠다니는 섬을 개조해서 비행선처럼 움직이고, 새로운 섬을 찾아다니며 자연을 복구하는 탐험형 생존 게임.","note":"앞서 해보기 상태로 콘텐츠와 시스템이 변경될 수 있어.","emoji":"☁️","free":false,"early":true,"link":"https://store.steampowered.com/app/1660080/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1660080/header.jpg","art":"#dce6df","symbol":"↗","price":27500,"discount":0,"hours":"15–35시간","screenshot":"https://cdn.cloudflare.steamstatic.com/steam/apps/1660080/ss_d8102c5087154fe86b96bf200dbe1fc013966ea2.1920x1080.jpg","gallery":["https://cdn.cloudflare.steamstatic.com/steam/apps/1660080/ss_d8102c5087154fe86b96bf200dbe1fc013966ea2.1920x1080.jpg"],"reviews":[{"who":"체크 포인트","text":"공중섬 이동과 집 꾸미기가 핵심. 앞서 해보기 단계라 업데이트별 콘텐츠 차이 확인이 좋아.","url":"https://store.steampowered.com/app/1660080/?l=koreana"}],"priceSource":"https://steamdb.info/app/1660080/"},{"id":"2707930","name":"팔리아","en":"Palia","dim":"3D","focus":"town","rank":6,"adventure":3,"home":5,"cute":5,"tags":["무료","생활","낚시","수수께끼"],"pitch":"판타지 마을에서 편안하게 사는 느낌","detail":"퀘스트와 유적을 돌아다니며 낚시·벌레잡기·꾸미기를 즐기는 온라인 생활 게임. 귀여운 세계와 주민들이 강점.","note":"공용 온라인 세계라 완전히 독립된 둘만의 서버형 게임은 아니야.","emoji":"🪴","free":true,"early":false,"link":"https://store.steampowered.com/app/2707930/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2707930/header.jpg","art":"#eee5dc","symbol":"⌂","price":0,"discount":0,"hours":"50–150시간+","screenshot":"https://cdn.mos.cms.futurecdn.net/vKozQ8Z6yyiqiijwCepnDf.jpg","gallery":["https://cdn.mos.cms.futurecdn.net/vKozQ8Z6yyiqiijwCepnDf.jpg"],"reviews":[{"who":"체크 포인트","text":"농사·수집·꾸미기가 중심인 소셜 월드. 보스 공략보다는 느긋한 생활을 기대해야 해.","url":"https://store.steampowered.com/app/2707930/?l=koreana"}],"priceSource":"https://steamdb.info/app/2707930/"},{"id":"361420","name":"아스트로니어","en":"ASTRONEER","dim":"3D","focus":"adventure","rank":7,"adventure":5,"home":3,"cute":4,"tags":["우주","행성 탐사","기지","자동화"],"pitch":"둘이서 낯선 행성을 탐사하는 우주 여행","detail":"행성 곳곳을 파고 자원을 모아 산소 공급망과 기지를 확장해. 발견과 개척의 재미가 크고 그래픽도 귀여워.","note":"몬스터 전투보다는 탐사·생존·자동화에 집중.","emoji":"🚀","free":false,"early":false,"link":"https://store.steampowered.com/app/361420/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/361420/header.jpg","art":"#dce6df","symbol":"↗","price":32000,"discount":0,"hours":"25–50시간","screenshot":"https://tinfoil.media/i/0100E63013E60000/0/0/18e4d6333dfaa703b25d6d692b203e86ec84c055b98554ecaf9aa599f256541c","gallery":["https://tinfoil.media/i/0100E63013E60000/0/0/18e4d6333dfaa703b25d6d692b203e86ec84c055b98554ecaf9aa599f256541c"],"reviews":[{"who":"체크 포인트","text":"탐사·운송·기지 자동화를 즐기는 게임. 정해진 보스전은 주된 재미가 아니야.","url":"https://store.steampowered.com/app/361420/?l=koreana"}],"priceSource":"https://steamdb.info/app/361420/"},{"id":"1211020","name":"워블리 라이프","en":"Wobbly Life","dim":"3D","focus":"adventure","rank":8,"adventure":3,"home":2,"cute":5,"tags":["자유로운 탐험","미니게임","직업","장난"],"pitch":"둘이서 온갖 아르바이트와 장난을 치는 세계","detail":"헐렁헐렁한 캐릭터로 마을을 돌아다니고 미션, 비밀 장소, 미니게임을 찾는 코믹 오픈월드.","note":"집을 사거나 꾸밀 수 있지만 깊은 건축·RPG는 아님.","emoji":"🚗","free":false,"early":false,"link":"https://store.steampowered.com/app/1211020/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1211020/header.jpg","art":"#dce6df","symbol":"↗","price":25270,"discount":0,"hours":"15–40시간","screenshot":"https://cdn.cloudflare.steamstatic.com/steam/apps/1211020/ss_0642739f01863ebb55c47d022e8494ebe87c3670.1920x1080.jpg","gallery":["https://cdn.cloudflare.steamstatic.com/steam/apps/1211020/ss_0642739f01863ebb55c47d022e8494ebe87c3670.1920x1080.jpg"],"reviews":[{"who":"Steam 이용자 평가","text":"전체 평가에서 약 97% 긍정적. 일과 미션, 장난스러운 물리 엔진이 강점.","url":"https://store.steampowered.com/app/1211020/?l=koreana"}],"priceSource":"https://steamdb.info/app/1211020/"},{"id":"1203620","name":"인슈라오디드","en":"Enshrouded","dim":"3D","focus":"adventure","rank":9,"adventure":5,"home":4,"cute":2,"tags":["판타지 RPG","보스","건축","던전"],"pitch":"조금 더 진지한 판타지에서 대모험","detail":"거대한 세계를 탐험하고 직업과 장비를 성장시키며 다양한 건물을 만들 수 있어. 포탈나이츠의 전투·탐험 쪽을 강화한 느낌.","note":"아기자기함은 낮고 전투와 난도가 있는 편.","emoji":"⚔️","free":false,"early":false,"link":"https://store.steampowered.com/app/1203620/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1203620/header.jpg","art":"#dce6df","symbol":"↗","price":38610,"discount":10,"hours":"40–90시간+","screenshot":"https://cdn.mos.cms.futurecdn.net/THctaQjNqwqfhCWeFAExzN-1200-80.jpg","gallery":["https://cdn.mos.cms.futurecdn.net/THctaQjNqwqfhCWeFAExzN-1200-80.jpg"],"reviews":[{"who":"커뮤니티 · 장점","text":"자유로운 건축과 넓은 탐험 세계는 특히 호평을 받아.","url":"https://www.reddit.com/r/Enshrouded/comments/1wof33c/never_played_this_game_whats_the_main_draw_of_it/"},{"who":"커뮤니티 · 아쉬움","text":"반면 전투 패턴이 반복적이라는 지적도 있어.","url":"https://www.reddit.com/r/Enshrouded/comments/1uhv13j/the_combat_is_holding_the_game_back/"}],"priceSource":"https://steamdb.info/app/1203620/"},{"id":"2661300","name":"그라운디드 2","en":"Grounded 2","dim":"3D","focus":"adventure","rank":10,"adventure":5,"home":3,"cute":3,"tags":["곤충 세계","기지","생존","탐험"],"pitch":"작아진 몸으로 거대한 뒷마당을 탐험","detail":"곤충만 한 사람으로 공원을 탐험하며 기지를 세우고 탈것 같은 곤충과 함께 살아남는 게임.","note":"거미 등 벌레 묘사가 많고, 앞서 해보기 게임이야.","emoji":"🐞","free":false,"early":true,"link":"https://store.steampowered.com/app/2661300/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2661300/header.jpg","art":"#dce6df","symbol":"↗","price":34800,"discount":0,"hours":"20–50시간","screenshot":"https://cdn.mos.cms.futurecdn.net/afMgcvpWSykvuMTSRHMysF.jpg","gallery":["https://cdn.mos.cms.futurecdn.net/afMgcvpWSykvuMTSRHMysF.jpg"],"reviews":[{"who":"체크 포인트","text":"곤충과 생존 전투가 주요 재미. 벌레가 부담스럽다면 미리 영상을 확인해보자.","url":"https://store.steampowered.com/app/2661300/?l=koreana"}],"priceSource":"https://steamdb.info/app/2661300/"},{"id":"648800","name":"래프트","en":"Raft","dim":"3D","focus":"balance","rank":11,"adventure":4,"home":4,"cute":3,"tags":["바다 여행","뗏목","제작","스토리"],"pitch":"작은 뗏목 한 칸부터 시작하는 바다 위의 집","detail":"물 위에서 재료를 모아 뗏목을 넓히고, 섬과 해상 시설을 탐험하면서 함께 이야기를 진행해.","note":"갈증·배고픔 관리가 있고 귀여운 판타지보다는 생존 느낌.","emoji":"🛶","free":false,"early":false,"link":"https://store.steampowered.com/app/648800/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/648800/header.jpg","art":"#e6e2ed","symbol":"↔","price":21000,"discount":0,"hours":"20–40시간","screenshot":"https://images.steamusercontent.com/ugc/927058790420554013/390AC953F6B7F8E671538805B607565071589EFF/?ima=fit&imcolor=%23000000&imh=576&impolicy=Letterbox&imw=1024&letterbox=true","gallery":["https://images.steamusercontent.com/ugc/927058790420554013/390AC953F6B7F8E671538805B607565071589EFF/?ima=fit&imcolor=%23000000&imh=576&impolicy=Letterbox&imw=1024&letterbox=true"],"reviews":[{"who":"체크 포인트","text":"해상 기지 성장과 섬 탐험 중심. 상어와 갈증·허기 관리 등 생존 스트레스가 있어.","url":"https://store.steampowered.com/app/648800/?l=koreana"}],"priceSource":"https://steamdb.info/app/648800/"},{"id":"1084600","name":"마이 타임 앳 샌드록","en":"My Time at Sandrock","dim":"3D","focus":"town","rank":12,"adventure":3,"home":5,"cute":4,"tags":["공방","마을","제작","탐험"],"pitch":"망가진 마을을 고치는 공방 생활","detail":"자원을 모아 기계를 제작하고 마을을 발전시키는 3D 생활 RPG. 멀티플레이로 협력하며 작업장을 운영할 수 있어.","note":"멀티플레이는 싱글 스토리와 분리된 전용 모드야.","emoji":"🛠️","free":false,"early":false,"link":"https://store.steampowered.com/app/1084600/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1084600/header.jpg","art":"#eee5dc","symbol":"⌂","price":13440,"discount":70,"hours":"30–70시간","screenshot":"https://www.global-esports.news/wp-content/uploads/2022/06/My-Time-at-Sandrock-View-Screenshots-7.jpg","gallery":["https://www.global-esports.news/wp-content/uploads/2022/06/My-Time-at-Sandrock-View-Screenshots-7.jpg"],"reviews":[{"who":"체크 포인트","text":"협동 모드는 본편의 싱글 스토리와 별개. 구매 전 둘이 하고 싶은 콘텐츠를 확인해야 해.","url":"https://store.steampowered.com/app/1084600/?l=koreana"}],"priceSource":"https://steamdb.info/app/1084600/"},{"id":"2195120","name":"고고 타운!","en":"Go-Go Town!","dim":"3D","focus":"town","rank":13,"adventure":1,"home":5,"cute":5,"tags":["마을 경영","인테리어","꾸미기","주민"],"pitch":"둘이 만드는 장난감 같은 귀여운 도시","detail":"빈 마을에 가게와 도로를 놓고 주민들을 고용해 활기찬 작은 도시로 키워 나가는 게임.","note":"던전이나 본격적인 전투가 거의 없어 모험 취향에는 후순위.","emoji":"🏡","free":false,"early":false,"link":"https://store.steampowered.com/app/2195120/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2195120/header.jpg","art":"#eee5dc","symbol":"⌂","price":24000,"discount":20,"hours":"20–50시간","screenshot":"https://www.notebookcheck.com/fileadmin/Notebooks/News/_nc5/Go-Go-Town-Gameplay-v2.jpg","gallery":["https://www.notebookcheck.com/fileadmin/Notebooks/News/_nc5/Go-Go-Town-Gameplay-v2.jpg"],"reviews":[{"who":"체크 포인트","text":"소소한 마을 경영과 건물 꾸미기 중심. 던전·보스전 비중은 낮아.","url":"https://store.steampowered.com/app/2195120/?l=koreana"}],"priceSource":"https://steamdb.info/app/2195120/"},{"id":"1621690","name":"코어 키퍼","en":"Core Keeper","dim":"2D","focus":"adventure","rank":14,"adventure":5,"home":4,"cute":4,"tags":["보스전","지하 탐험","기지","농사"],"pitch":"땅을 파면 새로운 세상이 계속 나오는 게임","detail":"신비로운 지하에서 광석을 캐고 장비를 만들며, 거대한 보스를 잡고 예쁜 기지도 꾸밀 수 있어.","note":"2D 도트 그래픽이어서 3D 선호라면 고려가 필요해.","emoji":"💎","free":false,"early":false,"link":"https://store.steampowered.com/app/1621690/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1621690/header.jpg","art":"#dce6df","symbol":"↗","price":21500,"discount":0,"hours":"40–90시간+","screenshot":"https://cdn-ak.f.st-hatena.com/images/fotolife/t/torikeratopusu-pu/20240318/20240318235410.jpg","gallery":["https://cdn-ak.f.st-hatena.com/images/fotolife/t/torikeratopusu-pu/20240318/20240318235410.jpg"],"reviews":[{"who":"Steam 한국어 평가","text":"한국어 이용자 평가 약 4,800개 중 95% 긍정적. 동굴·보스·건축의 조합이 인기.","url":"https://store.steampowered.com/app/1621690/?l=koreana"}],"priceSource":"https://steamdb.info/app/1621690/"},{"id":"1169040","name":"네세스","en":"Necesse","dim":"2D","focus":"balance","rank":15,"adventure":5,"home":5,"cute":4,"tags":["마을 NPC","던전","자동화","보스"],"pitch":"마을 사람들과 함께 점점 커지는 모험","detail":"주민을 모아 일을 맡기고, 던전과 섬을 탐험하며 보스를 공략해. 모험과 마을 시스템의 깊이가 모두 좋아.","note":"화려한 3D보다는 위에서 내려다보는 도트 스타일.","emoji":"🏘️","free":false,"early":false,"link":"https://store.steampowered.com/app/1169040/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1169040/header.jpg","art":"#e6e2ed","symbol":"↔","price":10720,"discount":35,"hours":"40–100시간+","screenshot":"https://cdn.mos.cms.futurecdn.net/RAygfzgL3HPSbCF2YyCjNP.png","gallery":["https://cdn.mos.cms.futurecdn.net/RAygfzgL3HPSbCF2YyCjNP.png"],"reviews":[{"who":"체크 포인트","text":"던전·보스 공략과 주민 자동화가 동시에 깊어. 농장만 꾸미는 게임은 아니야.","url":"https://store.steampowered.com/app/1169040/?l=koreana"}],"priceSource":"https://steamdb.info/app/1169040/"},{"id":"1432860","name":"선 헤이븐","en":"Sun Haven","dim":"2D","focus":"balance","rank":16,"adventure":4,"home":5,"cute":5,"tags":["마법","농사","판타지","전투"],"pitch":"마법이 있는 귀여운 농장 RPG","detail":"농장과 관계를 키우면서 다른 마을과 판타지 지역을 여행하고, 마법과 장비를 성장시켜 전투도 즐겨.","note":"생활 비중이 크고 최근 이용자 평가는 엇갈리는 편.","emoji":"✨","free":false,"early":false,"link":"https://store.steampowered.com/app/1432860/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1432860/header.jpg","art":"#e6e2ed","symbol":"↔","price":27000,"discount":0,"hours":"50–120시간+","screenshot":"https://steamuserimages-a.akamaihd.net/ugc/1686018415147930821/F000FB52DBE93719B654121BC772FF02EC6602F5/?ima=fit&imcolor=%23000000&impolicy=Letterbox&imw=1024&letterbox=false","gallery":["https://steamuserimages-a.akamaihd.net/ugc/1686018415147930821/F000FB52DBE93719B654121BC772FF02EC6602F5/?ima=fit&imcolor=%23000000&impolicy=Letterbox&imw=1024&letterbox=false"],"reviews":[{"who":"체크 포인트","text":"아기자기한 판타지 농장, 마법, 성장 요소가 강점. 장기적인 농장 운영이 주된 콘텐츠야.","url":"https://store.steampowered.com/app/1432860/?l=koreana"}],"priceSource":"https://steamdb.info/app/1432860/"},{"id":"105600","name":"테라리아","en":"Terraria","dim":"2D","focus":"adventure","rank":17,"adventure":5,"home":4,"cute":3,"tags":["보스전","탐험","아이템","건축"],"pitch":"작은 픽셀 세계 속 끝없는 보스와 모험","detail":"땅을 파고 공중섬과 지하를 탐색하며 수많은 장비와 보스를 만나는 깊이 있는 샌드박스.","note":"처음엔 무엇을 할지 막막할 수 있고 화면이 2D야.","emoji":"🗡️","free":false,"early":false,"link":"https://store.steampowered.com/app/105600/?l=koreana","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/105600/header.jpg","art":"#dce6df","symbol":"↗","price":11000,"discount":0,"hours":"60–150시간+","screenshot":"https://staticg.sportskeeda.com/editor/2023/01/02c4d-16739074503566-1920.jpg?w=1200","gallery":["https://staticg.sportskeeda.com/editor/2023/01/02c4d-16739074503566-1920.jpg?w=1200"],"reviews":[{"who":"체크 포인트","text":"탐험·보스·장비 수집 콘텐츠가 매우 풍부하지만 처음엔 무엇을 해야 할지 막막할 수 있어.","url":"https://store.steampowered.com/app/105600/?l=koreana"}],"priceSource":"https://steamdb.info/app/105600/"}];
+const FOCUS={adventure:'모험 · 탐험',balance:'모험 + 생활',town:'마을 · 꾸미기'};
+const HERO_IDS=['2408820','lego','2230110','1062520','1660080'];
+const PICKS=[{id:'1621690',why:'보스전과 기지 꾸미기를 둘 다 원한다면'},{id:'1211020',why:'부담 없이 웃으면서 하고 싶은 날'},{id:'648800',why:'뗏목 한 칸에서 시작하는 둘만의 생존기'}];
+// PC 온라인 협동 기준 최대 인원 (2026.10 확인)
+const PLAYERS={'2408820':4,lego:8,'2230110':4,'1062520':4,'1660080':8,'2707930':4,'361420':4,'1211020':4,'1203620':16,'2661300':4,'648800':8,'1084600':4,'2195120':4,'1621690':8,'1169040':5,'1432860':8,'105600':8};
+const PLAYER_NOTE={'2707930':'파티는 4명, 공용 월드는 최대 25명','1169040':'전용 서버는 인원 설정 가능','105600':'전용 서버는 더 많은 인원 가능','648800':'호스트 사양에 따라 더 많이 가능','1084600':'싱글 스토리와 별개인 멀티 전용 모드'};
+const S={dim:'all',focus:'all',q:'',budget:'all',party:'all',liked:false,sort:'rank',rankDim:'all'};
+const STORE_KEY='playdate-picked-v2';
+const $=(s)=>document.querySelector(s);
+const $$=(s)=>Array.from(document.querySelectorAll(s));
+const byId=(id)=>games.find(g=>g.id===id);
+const ICON={
+  heart:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg>',
+  ext:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>',
+  info:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 11v5"/></svg>',
+  x:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>'
+};
+
+let liked=new Set();
+try{const raw=JSON.parse(localStorage.getItem(STORE_KEY)||'[]');if(Array.isArray(raw))liked=new Set(raw.filter(id=>byId(id)));}catch(e){}
+
+function esc(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function won(v){return v===0?'무료':new Intl.NumberFormat('ko-KR').format(v)+'원';}
+function isSteam(g){return /^\d+$/.test(g.id);}
+function steamAsset(g,file){return `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${g.id}/${file}`;}
+function sources(g,kind){
+  const list=[];
+  if(kind==='hero'){if(isSteam(g))list.push(steamAsset(g,'library_hero.jpg'));list.push(g.screenshot,g.image);}
+  else{if(isSteam(g))list.push(steamAsset(g,'capsule_616x353.jpg'));list.push(g.image,g.screenshot);}
+  return [...new Set(list.filter(Boolean))];
+}
+function imgTag(list,alt,eager){return `<img src="${esc(list[0])}" data-fallback="${esc(list.slice(1).join('|'))}" alt="${esc(alt)}"${eager?'':' loading="lazy"'} decoding="async" onerror="nextSrc(this)">`;}
+function nextSrc(el){const rest=(el.dataset.fallback||'').split('|').filter(Boolean);if(!rest.length){el.onerror=null;el.classList.add('broken');return;}el.dataset.fallback=rest.slice(1).join('|');el.src=rest[0];}
+function thumb(g,kind='capsule',eager=false){return `<div class="thumb" data-name="${esc(g.en)}">${imgTag(sources(g,kind),g.name,eager)}</div>`;}
+function catText(g){return `${g.dim} · ${FOCUS[g.focus]}`;}
+function maxP(g){return PLAYERS[g.id]||2;}
+function storeName(g){return isSteam(g)?'Steam':'공식 사이트';}
+function likeLabel(g){return liked.has(g.id)?`${g.name} 찜 해제`:`${g.name} 찜하기`;}
+
+/* ---------- Hero ---------- */
+let heroIdx=0,heroTimer=null;
+const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function renderHero(){
+  const items=HERO_IDS.map(byId);
+  $('#stage').innerHTML=items.map((g,i)=>`<div class="slide${i===0?' on':''}" role="group" aria-roledescription="slide" aria-label="${i+1} / ${items.length}" aria-hidden="${i!==0}">${imgTag(sources(g,'hero'),g.name,i===0)}<div class="slide-copy"><span class="slide-badge">에디터 추천 ${g.rank}위</span><h2>${esc(g.name)}</h2><p class="slide-en">${esc(g.en)}</p><p class="slide-pitch">${esc(g.pitch)}</p><div class="slide-meta"><span>${catText(g)}</span><span>최대 <b>${maxP(g)}인</b></span><span>2인 <b>${won(g.price*2)}</b></span><span>${esc(g.hours)}</span></div><div class="slide-actions"><button class="btn btn-light" type="button" data-detail="${g.id}">자세히 보기</button><button class="btn btn-ghost" type="button" data-like="${g.id}" aria-pressed="${liked.has(g.id)}" aria-label="${esc(likeLabel(g))}">${ICON.heart}<span class="like-text">${liked.has(g.id)?'찜함':'찜하기'}</span></button></div></div></div>`).join('')
+    +`<div class="dots" role="group" aria-label="슬라이드 선택">${items.map((g,i)=>`<button type="button" class="${i===0?'on':''}" data-hero="${i}" aria-label="${esc(g.name)}"></button>`).join('')}</div>`;
+  $('#heroList').innerHTML=items.map((g,i)=>`<li><button type="button" class="hero-item${i===0?' on':''}" data-hero="${i}">${thumb(g)}<span><strong>${esc(g.name)}</strong><small>${catText(g)}</small></span><span class="bar"></span></button></li>`).join('');
+}
+function goHero(i){
+  const n=HERO_IDS.length;heroIdx=(i+n)%n;
+  $$('#stage .slide').forEach((el,k)=>{el.classList.toggle('on',k===heroIdx);el.setAttribute('aria-hidden',String(k!==heroIdx));});
+  $$('[data-hero]').forEach(el=>{const on=Number(el.dataset.hero)===heroIdx;el.classList.remove('on');if(on){void el.offsetWidth;el.classList.add('on');}});
+}
+function startHero(){stopHero();if(reduceMotion)return;heroTimer=setInterval(()=>goHero(heroIdx+1),6000);}
+function stopHero(){clearInterval(heroTimer);heroTimer=null;}
+
+/* ---------- Home sections ---------- */
+function renderPicks(){
+  $('#picks').innerHTML=PICKS.map(p=>{const g=byId(p.id);return `<button class="pick" type="button" data-detail="${g.id}">${thumb(g)}<span class="pick-why">${esc(p.why)}</span><strong>${esc(g.name)}</strong><p>${esc(g.detail)}</p></button>`;}).join('');
+  const cheap=games.filter(g=>g.price*2<=30000).sort((a,b)=>a.price-b.price||a.rank-b.rank);
+  $('#shelf').innerHTML=cheap.map(g=>`<button class="mini" type="button" data-detail="${g.id}">${thumb(g)}<strong>${esc(g.name)}</strong><span>2인 <b>${won(g.price*2)}</b></span></button>`).join('');
+}
+function renderRanking(){
+  const list=games.filter(g=>S.rankDim==='all'||g.dim===S.rankDim).sort((a,b)=>a.rank-b.rank).slice(0,10);
+  $('#rankList').innerHTML=list.map((g,i)=>`<li><button type="button" class="rank-row${i<3?' top':''}" data-detail="${g.id}"><span class="rank-num">${i+1}</span>${thumb(g)}<span style="min-width:0"><strong>${esc(g.name)}</strong><small>${FOCUS[g.focus]} · 최대 ${maxP(g)}인</small></span><span class="rank-price">${won(g.price*2)}<em>2인</em></span></button></li>`).join('');
+  $$('#rankSeg [data-rank-dim]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.rankDim===S.rankDim)));
+}
+
+/* ---------- Catalog ---------- */
+function matches(g,ignoreFocus){
+  const q=S.q.trim().toLocaleLowerCase();
+  return (S.dim==='all'||g.dim===S.dim)
+    &&(ignoreFocus||S.focus==='all'||g.focus===S.focus)
+    &&(S.budget==='all'||g.price*2<=Number(S.budget))
+    &&(S.party==='all'||(S.party==='4'?maxP(g)<=4:maxP(g)>=Number(S.party)))
+    &&(!S.liked||liked.has(g.id))
+    &&(!q||[g.name,g.en,g.pitch,g.detail,g.note,FOCUS[g.focus],g.dim,...g.tags].join(' ').toLocaleLowerCase().includes(q));
+}
+function getResults(){
+  return games.filter(g=>matches(g,false)).sort((a,b)=>S.sort==='rank'?a.rank-b.rank:S.sort==='price'?(a.price-b.price||a.rank-b.rank):S.sort==='players'?(maxP(b)-maxP(a)||a.rank-b.rank):(b[S.sort]-a[S.sort]||a.rank-b.rank));
+}
+function card(g){
+  const badges=[g.free?'<span class="badge free">무료</span>':'',g.early?'<span class="badge early">앞서 해보기</span>':''].join('');
+  return `<article class="card"><div class="card-media"><button type="button" style="display:block;width:100%" data-detail="${g.id}" aria-label="${esc(g.name)} 자세히 보기">${thumb(g)}</button>${badges?`<div class="badges">${badges}</div>`:''}<button class="heart" type="button" data-like="${g.id}" aria-pressed="${liked.has(g.id)}" aria-label="${esc(likeLabel(g))}">${ICON.heart}</button></div><div class="card-body"><span class="card-cat">${catText(g)} · <span class="pl">최대 ${maxP(g)}인</span></span><button type="button" class="card-title" data-detail="${g.id}">${esc(g.name)}</button><p class="card-pitch">${esc(g.pitch)}</p><div class="card-foot"><span class="price">${g.discount?`<span class="off">${g.discount}%</span>`:''}${won(g.price*2)}${g.price?'<small>2인</small>':''}</span><span class="hours">${esc(g.hours)}</span></div></div></article>`;
+}
+function renderCatalog(){
+  const items=getResults();
+  $('#grid').innerHTML=items.length?items.map(card).join(''):`<div class="empty"><strong>조건에 맞는 게임이 없어요</strong><p>필터를 줄이거나 다른 키워드로 검색해 보세요.</p><button class="btn btn-dark" type="button" data-reset>필터 초기화</button></div>`;
+  $('#result').innerHTML=`<b>${items.length}</b>개 게임`;
+  $$('#focusTabs [data-focus]').forEach(el=>{
+    const f=el.dataset.focus;
+    el.setAttribute('aria-selected',String(f===S.focus));
+    el.querySelector('.n').textContent=games.filter(g=>matches(g,true)&&(f==='all'||g.focus===f)).length;
+  });
+}
+function syncLikes(){
+  $('#savedCount').textContent=liked.size;
+  $$('[data-like]').forEach(el=>{
+    const g=byId(el.dataset.like);if(!g)return;
+    const on=liked.has(g.id);
+    el.setAttribute('aria-pressed',String(on));
+    if(!el.classList.contains('tiny'))el.setAttribute('aria-label',likeLabel(g));
+    const t=el.querySelector('.like-text');if(t)t.textContent=on?'찜함':'찜하기';
+  });
+}
+function saveLikes(){try{localStorage.setItem(STORE_KEY,JSON.stringify([...liked]));}catch(e){}}
+function toggleLike(id){
+  const g=byId(id);if(!g)return;
+  const on=!liked.has(id);on?liked.add(id):liked.delete(id);
+  saveLikes();
+  if(S.liked)renderCatalog();
+  syncLikes();
+  if($('#drawer').classList.contains('open'))renderSaved();
+  toast(on?`${g.name}을(를) 찜했어요`:`찜 목록에서 뺐어요`);
+}
+
+/* ---------- Drawer ---------- */
+function renderSaved(){
+  const items=games.filter(g=>liked.has(g.id)).sort((a,b)=>a.rank-b.rank);
+  $('#drawerCount').textContent=items.length?` ${items.length}`:'';
+  $('#shareList').disabled=!items.length;
+  $('#drawRandom').disabled=!items.length;
+  $('#savedTotal').textContent=won(items.reduce((s,g)=>s+g.price*2,0));
+  $('#savedList').innerHTML=items.length?items.map(g=>`<div class="saved-row">${thumb(g)}<div style="min-width:0"><button type="button" class="name" data-detail="${g.id}">${esc(g.name)}</button><small>${catText(g)} · 최대 ${maxP(g)}인 · 2인 ${won(g.price*2)}</small></div><button type="button" class="icon-btn tiny" data-like="${g.id}" aria-label="${esc(g.name)} 찜 해제">${ICON.x}</button></div>`).join('')
+    :`<div class="saved-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg><strong>아직 찜한 게임이 없어요</strong><p>게임 카드의 하트를 눌러<br>함께 해보고 싶은 후보를 모아보세요.</p></div>`;
+}
+
+/* ---------- Detail modal ---------- */
+function openDetail(id){
+  const g=byId(id);if(!g)return;
+  if(overlay)hideOverlay(false);
+  const shots=[...new Set([...(g.gallery||[]),sources(g,'capsule')[0]])].slice(0,4);
+  const pips=(v)=>`<span class="pips" aria-hidden="true">${[1,2,3,4,5].map(n=>`<i class="${n<=v?'on':''}"></i>`).join('')}</span>`;
+  $('#modalBody').innerHTML=`
+  <div class="m-top">
+    <div class="viewer">
+      <div class="thumb" data-name="${esc(g.en)}" id="viewerMain">${imgTag([shots[0],...sources(g,'capsule')],g.name+' 게임 화면',true)}</div>
+      ${shots.length>1?`<div class="viewer-thumbs">${shots.map((u,i)=>`<button type="button" data-shot="${esc(u)}" aria-current="${i===0}" aria-label="스크린샷 ${i+1}"><div class="thumb"><img src="${esc(u)}" alt="" loading="lazy" onerror="this.closest('button').remove()"></div></button>`).join('')}</div>`:''}
+    </div>
+    <div class="m-info">
+      <span class="m-cat">${catText(g)} · 한국어 · 온라인 협동</span>
+      <h2 id="modalTitle">${esc(g.name)}</h2>
+      <p class="m-en">${esc(g.en)}</p>
+      <p class="m-pitch">${esc(g.pitch)}</p>
+      <div class="m-tags">${g.free?'<span>무료</span>':''}${g.early?'<span>앞서 해보기</span>':''}${g.tags.filter(t=>t!=='무료').map(t=>`<span>${esc(t)}</span>`).join('')}</div>
+      <dl class="facts">
+        <div><dt>1인 가격</dt><dd>${g.discount?`<span class="off">${g.discount}%</span>`:''}${won(g.price)}${g.discount?'<small>조회 당시 할인가</small>':''}</dd></div>
+        <div><dt>2인 구매</dt><dd>${won(g.price*2)}</dd></div>
+        <div><dt>협동 인원</dt><dd>2–${maxP(g)}인${PLAYER_NOTE[g.id]?`<small>${esc(PLAYER_NOTE[g.id])}</small>`:''}</dd></div>
+        <div><dt>예상 플레이</dt><dd>${esc(g.hours)}</dd></div>
+      </dl>
+      <div class="scores">
+        ${[['탐험',g.adventure],['꾸미기',g.home],['귀여움',g.cute]].map(([n,v])=>`<div class="score"><span>${n}</span>${pips(v)}<b>${v}</b></div>`).join('')}
+      </div>
+      <div class="m-actions">
+        <button class="btn btn-line" type="button" data-like="${g.id}" aria-pressed="${liked.has(g.id)}" aria-label="${esc(likeLabel(g))}">${ICON.heart}<span class="like-text">${liked.has(g.id)?'찜함':'찜하기'}</span></button>
+        <a class="btn btn-dark" href="${esc(g.link)}" target="_blank" rel="noopener noreferrer">${storeName(g)}에서 보기${ICON.ext}</a>
+      </div>
+    </div>
+  </div>
+  <div class="m-bottom">
+    <div>
+      <h3>게임 소개</h3>
+      <p class="m-desc">${esc(g.detail)}</p>
+      <div class="notice">${ICON.info}<span><b>알아둘 점</b> · ${esc(g.note)}</span></div>
+    </div>
+    <div>
+      <h3>플레이어 반응</h3>
+      <div class="reviews">${g.reviews.map(r=>`<div class="review"><div class="review-top"><strong>${esc(r.who)}</strong><a href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">원문 보기</a></div><p>${esc(r.text)}</p></div>`).join('')}</div>
+    </div>
+  </div>`;
+  $('#modalPanel').scrollTop=0;
+  showOverlay('modal');
+}
+
+/* ---------- Overlay handling ---------- */
+let overlay=null,prevFocus=null;
+function box(kind){return kind==='drawer'?$('#drawer'):$('#modal');}
+function showOverlay(kind){
+  if(!prevFocus)prevFocus=document.activeElement;
+  overlay=kind;
+  $('#scrim').classList.add('show');
+  document.body.classList.add('locked');
+  box(kind).classList.add('open');box(kind).setAttribute('aria-hidden','false');
+  (kind==='drawer'?$('#closeSaved'):$('#closeModal')).focus({preventScroll:true});
+  stopHero();
+}
+function hideOverlay(restore=true){
+  if(!overlay)return;
+  box(overlay).classList.remove('open');box(overlay).setAttribute('aria-hidden','true');
+  overlay=null;
+  if(!restore)return;
+  $('#scrim').classList.remove('show');
+  document.body.classList.remove('locked');
+  if(prevFocus&&prevFocus.isConnected)prevFocus.focus({preventScroll:true});
+  prevFocus=null;
+  startHero();
+}
+function openSaved(){if(overlay)hideOverlay(false);renderSaved();showOverlay('drawer');}
+
+let toastTimer;
+function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2200);}
+
+async function shareSaved(){
+  const picks=games.filter(g=>liked.has(g.id)).sort((a,b)=>a.rank-b.rank);
+  if(!picks.length)return;
+  const text='[PLAYDATE] 같이 할 게임 후보\n\n'+picks.map((g,i)=>`${i+1}. ${g.name} — ${catText(g)} · 최대 ${maxP(g)}인\n   2인 ${won(g.price*2)} · ${g.hours}\n   ${g.pitch}\n   ${g.link}`).join('\n\n');
+  let ok=false;
+  try{await navigator.clipboard.writeText(text);ok=true;}catch(e){
+    const t=document.createElement('textarea');t.value=text;t.style.cssText='position:fixed;top:-9999px';document.body.append(t);t.select();
+    try{ok=document.execCommand('copy');}catch(err){}t.remove();
+  }
+  toast(ok?'목록을 복사했어요. 메신저에 붙여넣어 보세요':'복사가 차단됐어요. 다른 브라우저에서 시도해 주세요');
+}
+function setQuery(v,from){S.q=v;if(from!=='g')$('#gsearch').value=v;if(from!=='s')$('#search').value=v;renderCatalog();}
+function reset(){
+  Object.assign(S,{dim:'all',focus:'all',q:'',budget:'all',party:'all',liked:false,sort:'rank'});
+  $('#search').value='';$('#gsearch').value='';$('#dimSel').value='all';$('#budgetSel').value='all';$('#partySel').value='all';$('#onlyLiked').checked=false;$('#sortSel').value='rank';
+  renderCatalog();
+}
+
+/* ---------- Events ---------- */
+document.addEventListener('click',e=>{
+  const like=e.target.closest('[data-like]');if(like){e.preventDefault();toggleLike(like.dataset.like);return;}
+  const det=e.target.closest('[data-detail]');if(det){openDetail(det.dataset.detail);return;}
+  const hero=e.target.closest('[data-hero]');if(hero){goHero(Number(hero.dataset.hero));return;}
+  const shot=e.target.closest('[data-shot]');if(shot){
+    const img=$('#viewerMain img');img.classList.remove('broken');img.dataset.fallback='';img.onerror=()=>nextSrc(img);img.src=shot.dataset.shot;
+    $$('.viewer-thumbs [data-shot]').forEach(b=>b.setAttribute('aria-current',String(b===shot)));return;}
+  if(e.target.closest('[data-open-saved]')){e.preventDefault();openSaved();return;}
+  const bl=e.target.closest('[data-budget-link]');if(bl){S.budget=bl.dataset.budgetLink;$('#budgetSel').value=S.budget;S.sort='price';$('#sortSel').value='price';renderCatalog();return;}
+  if(e.target.closest('[data-reset]'))reset();
+});
+$('#focusTabs').addEventListener('click',e=>{const t=e.target.closest('[data-focus]');if(t){S.focus=t.dataset.focus;renderCatalog();}});
+$('#rankSeg').addEventListener('click',e=>{const b=e.target.closest('[data-rank-dim]');if(b){S.rankDim=b.dataset.rankDim;renderRanking();}});
+$('#search').addEventListener('input',e=>setQuery(e.target.value,'s'));
+$('#gsearch').addEventListener('input',e=>setQuery(e.target.value,'g'));
+$('#gsearch').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#explore').scrollIntoView();}});
+$('#dimSel').addEventListener('change',e=>{S.dim=e.target.value;renderCatalog();});
+$('#budgetSel').addEventListener('change',e=>{S.budget=e.target.value;renderCatalog();});
+$('#partySel').addEventListener('change',e=>{S.party=e.target.value;renderCatalog();});
+/* theme */
+function applyTheme(t,save){
+  document.documentElement.setAttribute('data-theme',t);
+  $('meta[name="theme-color"]').setAttribute('content',t==='dark'?'#16191e':'#ffffff');
+  $('#themeBtn').setAttribute('aria-label',t==='dark'?'라이트 모드로 전환':'다크 모드로 전환');
+  if(save){try{localStorage.setItem('playdate-theme',t);}catch(e){}}
+}
+$('#themeBtn').addEventListener('click',()=>applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark',true));
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{let saved=null;try{saved=localStorage.getItem('playdate-theme');}catch(err){}if(!saved)applyTheme(e.matches?'dark':'light',false);});
+applyTheme(document.documentElement.getAttribute('data-theme')||'light',false);
+$('#onlyLiked').addEventListener('change',e=>{S.liked=e.target.checked;renderCatalog();});
+$('#sortSel').addEventListener('change',e=>{S.sort=e.target.value;renderCatalog();});
+$('#reset').addEventListener('click',reset);
+$('#closeSaved').addEventListener('click',()=>hideOverlay());
+$('#closeModal').addEventListener('click',()=>hideOverlay());
+$('#scrim').addEventListener('click',()=>hideOverlay());
+$('#shareList').addEventListener('click',shareSaved);
+$('#drawRandom').addEventListener('click',()=>{const picks=games.filter(g=>liked.has(g.id));if(!picks.length)return;const g=picks[Math.floor(Math.random()*picks.length)];openDetail(g.id);toast(`오늘은 ${g.name} 어때요?`);});
+$('#hero').addEventListener('mouseenter',()=>{stopHero();$('#hero').classList.add('paused');});
+$('#hero').addEventListener('mouseleave',()=>{$('#hero').classList.remove('paused');if(!overlay){goHero(heroIdx);startHero();}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopHero();else if(!overlay)startHero();});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&overlay){hideOverlay();return;}
+  if(e.key==='Tab'&&overlay){
+    const els=Array.from(box(overlay).querySelectorAll('button:not(:disabled),a[href],input,select')).filter(x=>x.getClientRects().length);
+    if(!els.length)return;const first=els[0],last=els[els.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+  }
+});
+/* nav highlight */
+function updateNav(){
+  const ex=$('#explore').getBoundingClientRect().top;
+  const current=ex<window.innerHeight*0.45?'explore':'home';
+  $$('[data-nav]').forEach(a=>a.classList.toggle('on',a.dataset.nav===current));
+}
+window.addEventListener('scroll',updateNav,{passive:true});
+
+renderHero();renderPicks();renderRanking();renderCatalog();syncLikes();startHero();updateNav();
+</script>
+</body>
+</html>

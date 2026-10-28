@@ -1,0 +1,5 @@
+.playwright-mcp/
+docs/
+*.original.html
+.DS_Store
+Thumbs.db
