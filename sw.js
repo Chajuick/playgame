@@ -1,5 +1,5 @@
 /* PLAYDATE service worker — bump VERSION when shell files change */
-const VERSION = 'playdate-v2';
+const VERSION = 'playdate-v3';
 const SHELL_CACHE = `${VERSION}-shell`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 const IMAGE_CACHE = `${VERSION}-images`;
@@ -32,12 +32,15 @@ async function trim(cacheName, max) {
   for (let i = 0; i < keys.length - max; i++) await cache.delete(keys[i]);
 }
 
-// Pages: network first so updates show up, cached copy when offline
+// Pages: network first so updates show up, cached copy when offline.
+// Each page is cached under its own URL so /launcher/ never replaces the home page.
 async function networkFirst(request) {
   try {
     const response = await fetch(request);
-    const cache = await caches.open(SHELL_CACHE);
-    cache.put('./index.html', response.clone());
+    if (response && response.ok) {
+      const cache = await caches.open(SHELL_CACHE);
+      cache.put(request, response.clone());
+    }
     return response;
   } catch (err) {
     return (await caches.match(request)) || (await caches.match('./index.html'));
@@ -74,6 +77,9 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
+
+  // Launcher installer and version file: always straight from the network, never cached
+  if (url.origin === self.location.origin && /\/launcher\/(latest\.json|[^/]+\.exe)$/.test(url.pathname)) return;
 
   if (request.mode === 'navigate') {
     event.respondWith(networkFirst(request));

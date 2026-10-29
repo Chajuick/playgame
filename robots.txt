@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://chajuick.github.io/playgame/sitemap.xml
+Sitemap: https://playgame-peach.vercel.app/sitemap.xml

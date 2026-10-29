@@ -21,5 +21,11 @@
 - `manifest.webmanifest`, `sw.js`: 홈 화면 설치, 오프라인 열람(한 번 방문한 뒤)
 - `og-image.png`: 카카오톡 · 디스코드 · X 등 링크 미리보기 이미지(1200×630)
 - `robots.txt`, `sitemap.xml`, JSON-LD 구조화 데이터
-- 배포 주소는 `https://chajuick.github.io/playgame/` 기준. 주소가 바뀌면 `index.html`의 canonical · og:url · og:image, `robots.txt`, `sitemap.xml`을 함께 고칩니다.
+- 배포 주소는 `https://playgame-peach.vercel.app/` 기준. 주소가 바뀌면 `index.html`의 canonical · og:url · og:image, `robots.txt`, `sitemap.xml`을 함께 고칩니다.
 - `index.html`이나 아이콘을 바꾼 뒤에는 `sw.js`의 `VERSION`을 올려야 설치된 앱에도 반영됩니다.
+
+## PC 런처 (`launcher/`)
+- `launcher/index.html`: PC 런처 소개 · 설치 안내 · 업데이트 내역 페이지
+- `launcher/PCLauncher-Setup.exe`, `launcher/latest.json`: 최신 설치 파일과 버전 정보. 직접 고치지 말고 `pc-launcher` 저장소에서 `npm run release -- <버전> "바뀐 점"`으로 만듭니다.
+- 설치된 런처는 `latest.json`을 6시간마다 읽어 새 버전을 알리고, SHA-256이 맞는 설치 파일만 실행합니다.
+- `vercel.json`: 두 파일이 캐시되지 않도록 헤더를 지정합니다. `sw.js`도 이 두 파일은 캐시하지 않습니다.
