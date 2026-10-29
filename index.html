@@ -78,9 +78,11 @@ document.documentElement.setAttribute('data-theme',t);})();
 }
 body,.gnb,.panel,.footer,.field{transition:background-color .2s,border-color .2s,color .2s}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scrollbar-gutter:stable}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.5;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;word-break:keep-all}
 body.locked{overflow:hidden}
+/* 팝업이 열려 있을 때 비워 둔 스크롤바 자리도 배경과 같이 어둡게 */
+html:has(body.locked){background:color-mix(in srgb,var(--bg) 45%,#0a0c0f)}
 a{color:inherit;text-decoration:none}
 button,input,select{font:inherit;color:inherit;letter-spacing:inherit}
 button{cursor:pointer;border:0;background:none;padding:0}
