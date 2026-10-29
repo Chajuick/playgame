@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff">
+<title>PC 런처 — 바탕화면을 PC방처럼 | PLAYDATE</title>
+<meta name="description" content="게임 · 메신저 · 인터넷 바로가기를 바탕화면 위젯으로. 켠 시각과 사용 시간, 글래스 · 메탈 · 우드 테마까지. PLAYDATE가 만든 무료 Windows 런처.">
+<link rel="canonical" href="https://playgame-peach.vercel.app/launcher/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PLAYDATE">
+<meta property="og:title" content="PC 런처 — 바탕화면을 PC방처럼">
+<meta property="og:description" content="게임 바로가기를 바탕화면 위젯으로. 무료 Windows 런처.">
+<meta property="og:url" content="https://playgame-peach.vercel.app/launcher/">
+<meta property="og:image" content="https://playgame-peach.vercel.app/launcher/img/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/icon.png" type="image/png">
+<script>
+(function(){var t;try{t=localStorage.getItem('playdate-theme')}catch(e){}
+if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+document.documentElement.dataset.theme=t;})();
+</script>
+<style>
+:root{
+  --bg:#f3f4f6;--surface:#fff;--surface-2:#f7f8f9;
+  --ink:#121418;--ink-2:#353a41;--muted:#626875;--line:#e3e5e9;--fill:#f1f3f5;
+  --pink:#d6336f;--pink-hover:#bf2a61;--pink-soft:#fde8ef;--on-pink:#fff;
+  --wrap:1120px;--gnb:60px;
+}
+:root[data-theme="dark"]{
+  --bg:#0d0f12;--surface:#16191e;--surface-2:#1d2026;
+  --ink:#eceef1;--ink-2:#c4c9d0;--muted:#959ca6;--line:#272b32;--fill:#20242a;
+  --pink:#ff70a9;--pink-hover:#ff8db9;--pink-soft:rgba(255,112,169,.13);--on-pink:#2b0f1c;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:-.01em;word-break:keep-all}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0}
+img{display:block;max-width:100%}
+h1,h2,h3,p{margin:0}
+:focus-visible{outline:2px solid var(--pink);outline-offset:2px}
+.wrap{width:min(var(--wrap),calc(100% - 48px));margin-inline:auto}
+
+/* 상단 메뉴 (PLAYDATE와 같은 구조) */
+.gnb{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.gnb-in{height:var(--gnb);display:flex;align-items:center;gap:32px}
+.logo{display:flex;align-items:center;gap:8px;font-size:19px;font-weight:800;letter-spacing:-.03em}
+.logo img{width:22px;height:22px;border-radius:6px}
+.nav{display:flex;gap:24px;height:100%}
+.nav a{position:relative;display:flex;align-items:center;font-weight:600;color:var(--muted)}
+.nav a:hover{color:var(--ink)}
+.nav a.on{color:var(--ink);font-weight:700}
+.nav a.on::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--ink)}
+.gnb-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.icon-btn{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--ink-2)}
+.icon-btn:hover{background:var(--fill)}
+.icon-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+[data-theme="dark"] .moon,:root:not([data-theme="dark"]) .sun{display:none}
+
+/* 버튼 */
+.btn{display:inline-flex;align-items:center;gap:10px;height:52px;padding:0 24px;border-radius:14px;font-weight:700;font-size:16px;white-space:nowrap;transition:background .15s,border-color .15s}
+.btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.btn.primary{background:var(--pink);color:var(--on-pink)}
+.btn.primary:hover{background:var(--pink-hover)}
+.btn.ghost{border:1px solid var(--line);background:var(--surface)}
+.btn.ghost:hover{border-color:var(--ink-2)}
+
+/* 첫 화면 */
+.hero{padding:64px 0 56px}
+.hero-in{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:56px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:13px;font-weight:600;color:var(--ink-2)}
+.badge img{width:24px;height:24px;border-radius:7px}
+.hero h1{margin-top:20px;font-size:46px;line-height:1.18;letter-spacing:-.045em;font-weight:800}
+.hero h1 em{font-style:normal;color:var(--pink)}
+.hero .lead{margin-top:16px;font-size:17px;color:var(--ink-2)}
+.cta{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px}
+.meta{margin-top:14px;font-size:13px;color:var(--muted)}
+.shot{border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:0 24px 60px rgba(17,20,24,.18);background:#151a27}
+.shot img{width:100%;height:auto}
+.shot-bar{height:30px;display:flex;align-items:center;gap:6px;padding:0 12px;background:#1d2232}
+.shot-bar i{width:10px;height:10px;border-radius:50%;background:#3a4157}
+
+/* 섹션 공통 */
+section.block{padding:64px 0;border-top:1px solid var(--line)}
+.eyebrow{font-size:13px;font-weight:700;color:var(--pink)}
+.block h2{margin-top:6px;font-size:30px;letter-spacing:-.04em;line-height:1.3}
+.block .sub{margin-top:8px;color:var(--muted)}
+
+/* 기능 */
+.features{margin-top:32px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.feature{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px}
+.feature .ic{width:42px;height:42px;border-radius:12px;background:var(--pink-soft);color:var(--pink);display:grid;place-items:center}
+.feature .ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.feature h3{margin-top:14px;font-size:17px}
+.feature p{margin-top:4px;font-size:14px;color:var(--muted)}
+
+/* 테마 */
+.gallery{margin-top:28px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.gallery figure{margin:0}
+.gallery img{border-radius:14px;border:1px solid var(--line);aspect-ratio:16/9;object-fit:cover;width:100%}
+.gallery figcaption{margin-top:8px;font-size:13px;color:var(--muted)}
+.gallery figcaption b{color:var(--ink)}
+.combo{margin-top:20px;display:grid;grid-template-columns:1fr 260px;gap:24px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px}
+.combo ul{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:8px;font-size:14px;color:var(--ink-2)}
+.combo li b{display:inline-block;min-width:44px;color:var(--ink)}
+.combo img{border-radius:12px;border:1px solid var(--line);width:100%}
+
+/* 설치 순서 */
+.steps{margin-top:32px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;counter-reset:s}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.step .n{width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--surface);display:grid;place-items:center;font-weight:800;font-size:14px}
+.step h3{font-size:17px}
+.step p{font-size:14px;color:var(--muted)}
+.step .pic{margin-top:auto;border-radius:12px;border:1px solid var(--line);overflow:hidden;background:var(--surface-2)}
+/* 설치 경고 창을 단순하게 그린 그림 */
+.smart{background:#1f4e8c;color:#fff;padding:16px 16px 14px;font-size:12px;line-height:1.5;min-height:150px;display:flex;flex-direction:column}
+.smart b{font-size:15px;font-weight:700}
+.smart u{color:#cfe3ff;text-underline-offset:2px}
+.smart .row{margin-top:auto;display:flex;justify-content:flex-end;gap:6px}
+.smart .row span{border:1px solid rgba(255,255,255,.6);padding:3px 12px;font-size:12px}
+.smart .row .run{background:#fff;color:#1f4e8c;font-weight:700;border-color:#fff}
+.smart .hl{outline:2px solid #ffcf3d;outline-offset:2px;border-radius:2px}
+.note{margin-top:18px;padding:14px 16px;border-radius:14px;background:var(--pink-soft);font-size:14px;color:var(--ink-2)}
+
+/* 처음 쓰는 법 */
+.tips{margin-top:28px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.tip{display:flex;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.tip .k{flex:none;width:36px;height:36px;border-radius:10px;background:var(--fill);display:grid;place-items:center;font-weight:800;color:var(--pink)}
+.tip h3{font-size:15px}
+.tip p{margin-top:2px;font-size:14px;color:var(--muted)}
+kbd{font:12px/1 Consolas,monospace;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:2px 6px;background:var(--surface);color:var(--ink-2)}
+
+/* 질문 */
+.faq{margin-top:24px;display:grid;gap:10px}
+.faq details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0 18px}
+.faq summary{list-style:none;cursor:pointer;padding:16px 0;font-weight:700;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';color:var(--muted);font-weight:400;font-size:20px;line-height:1}
+.faq details[open] summary::after{content:'−'}
+.faq p{padding:0 0 16px;color:var(--ink-2);font-size:14px}
+
+/* 업데이트 내역 */
+.changes{margin-top:24px;display:grid;gap:10px}
+.change{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;grid-template-columns:120px 1fr;gap:12px}
+.change .v{font-weight:800}
+.change .d{display:block;font-size:12px;color:var(--muted);font-weight:500}
+.change ul{margin:0;padding-left:18px;font-size:14px;color:var(--ink-2)}
+.change.latest{border-color:var(--pink)}
+.change.latest .v{color:var(--pink)}
+
+/* 마지막 받기 */
+.final{text-align:center}
+.final h2{font-size:32px}
+.final .cta{justify-content:center}
+
+.footer{background:var(--surface);border-top:1px solid var(--line);padding:30px 0 40px;color:var(--muted);font-size:12px}
+.footer-in{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+@media(max-width:900px){
+  .hero{padding:40px 0}
+  .hero-in{grid-template-columns:1fr;gap:32px}
+  .hero h1{font-size:36px}
+  .features,.gallery,.steps{grid-template-columns:1fr 1fr}
+  .combo{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .wrap{width:calc(100% - 32px)}
+  .gnb-in{gap:16px}
+  .nav{gap:16px}
+  .nav a{font-size:14px}
+  .hero h1{font-size:30px}
+  .features,.gallery,.steps,.tips{grid-template-columns:1fr}
+  .change{grid-template-columns:1fr;gap:6px}
+  .btn{width:100%;justify-content:center}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="gnb">
+  <div class="wrap gnb-in">
+    <a href="../" class="logo" aria-label="PLAYDATE 홈"><img src="../favicon.svg" alt="">PLAYDATE</a>
+    <nav class="nav" aria-label="주 메뉴">
+      <a href="../">게임 추천</a>
+      <a href="./" class="on" aria-current="page">PC 런처</a>
+    </nav>
+    <div class="gnb-right">
+      <button class="icon-btn" type="button" id="themeBtn" aria-label="테마 바꾸기">
+        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-in">
+      <div>
+        <span class="badge"><img src="img/icon.png" alt="">PLAYDATE가 만든 무료 Windows 앱</span>
+        <h1>바탕화면을<br><em>PC방처럼</em> 꾸며 보세요</h1>
+        <p class="lead">게임 · 메신저 · 인터넷 바로가기를 바탕화면 위젯으로 모아 두고, 켠 시각과 사용 시간도 한눈에. 배경화면은 그대로 보이고, 위젯만 살짝 떠 있어요.</p>
+        <div class="cta">
+          <a class="btn primary" href="PCLauncher-Setup.exe" download data-download>
+            <svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>무료로 받기
+          </a>
+          <a class="btn ghost" href="#install">설치 방법</a>
+        </div>
+        <p class="meta" id="meta">Windows 10 · 11 &nbsp;·&nbsp; 관리자 권한 필요 없음</p>
+      </div>
+      <div class="shot" aria-hidden="true">
+        <div class="shot-bar"><i></i><i></i><i></i></div>
+        <img src="img/hero.jpg" alt="" width="1600" height="900" fetchpriority="high">
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="features">
+    <div class="wrap">
+      <p class="eyebrow">무엇을 하나요</p>
+      <h2>자주 여는 건 전부 한곳에</h2>
+      <p class="sub">PC방 런처처럼 쓰되, 내 바탕화면은 그대로.</p>
+      <div class="features">
+        <div class="feature"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span><h3>바탕화면 위젯</h3><p>배경화면 위에 위젯만 떠 있어요. 게임을 켜면 그 아래로 깔리고, Win+D를 눌러도 남아 있어요.</p></div>
+        <div class="feature"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></span><h3>끌어다 놓으면 추가</h3><p>게임 아이콘(.exe · 바로가기)을 패널로 끌어다 놓으면 실제 아이콘까지 가져와요.</p></div>
+        <div class="feature"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span><h3>검색 한 번에</h3><p>아무 데서나 글자를 치면 바로 찾아요. 없으면 Enter로 네이버 · 구글 · 유튜브 검색.</p></div>
+        <div class="feature"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><h3>켠 시각 · 사용 시간</h3><p>오늘 언제 켰는지, 얼마나 썼는지 시계 위젯에. 절전에서 깨운 시각까지 알아서 계산해요.</p></div>
+        <div class="feature"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-1.7-1.3-2-2.5-2H16a2 2 0 0 1-2-2V6.5C14 4.3 13.7 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="14.5" cy="7.5" r="1"/></svg></span><h3>테마 80가지 조합</h3><p>기본 · 글래스 · 메탈 · 우드 재질에 라이트 · 다크, 컬러 10가지. 내 이미지 스티커도 붙일 수 있어요.</p></div>
+        <div class="feature"><span class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></span><h3>가볍고, 알아서 최신으로</h3><p>숨겨 두면 거의 쉬어요. 새 버전이 나오면 톱니바퀴에 표시되고, 누르면 바로 업데이트돼요.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="themes">
+    <div class="wrap">
+      <p class="eyebrow">테마</p>
+      <h2>재질 · 밝기 · 컬러를 따로 골라요</h2>
+      <p class="sub">설정에서 바꾸는 즉시 바탕화면에 반영돼요.</p>
+      <div class="gallery">
+        <figure><img src="img/wood.jpg" alt="우드 재질, 다크, 골드 컬러" loading="lazy" width="1600" height="900"><figcaption><b>우드</b> · 다크 · 골드</figcaption></figure>
+        <figure><img src="img/metal.jpg" alt="메탈 재질, 라이트, 그린 컬러" loading="lazy" width="1600" height="900"><figcaption><b>메탈</b> · 라이트 · 그린</figcaption></figure>
+        <figure><img src="img/dark.jpg" alt="기본 재질, 다크, 라벤더 컬러" loading="lazy" width="1600" height="900"><figcaption><b>기본</b> · 다크 · 라벤더</figcaption></figure>
+      </div>
+      <div class="combo">
+        <div>
+          <h3>설정 창 하나에서 전부</h3>
+          <ul>
+            <li><b>재질</b>기본(단색) · 글래스(배경이 흐리게 비침) · 메탈(실버 · 건메탈) · 우드(오크 · 월넛)</li>
+            <li><b>밝기</b>라이트 · 다크</li>
+            <li><b>컬러</b>핑크 · 라벤더 · 민트 · 블루 · 코랄 · 그린 · 골드 · 모노 · 말랑핑크 · 하늘</li>
+            <li><b>꾸미기</b>아이콘 색, 내 이미지 스티커, 시계 위젯 켜고 끄기</li>
+          </ul>
+        </div>
+        <img src="img/settings.png" alt="PC 런처 설정 창" loading="lazy" width="520" height="800">
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="install">
+    <div class="wrap">
+      <p class="eyebrow">설치 방법</p>
+      <h2>1분이면 끝나요</h2>
+      <p class="sub">관리자 권한 없이 내 계정에만 설치돼요.</p>
+      <div class="steps">
+        <div class="step">
+          <span class="n">1</span>
+          <h3>설치 파일 받기</h3>
+          <p>위의 <b>무료로 받기</b>를 눌러 <code>PCLauncher-Setup.exe</code>를 받고 실행해요.</p>
+          <div class="pic" style="padding:18px;display:grid;place-items:center;min-height:150px">
+            <a class="btn primary" href="PCLauncher-Setup.exe" download data-download style="height:44px;font-size:14px">
+              <svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>PCLauncher-Setup.exe
+            </a>
+          </div>
+        </div>
+        <div class="step">
+          <span class="n">2</span>
+          <h3>“PC 보호” 창이 뜨면</h3>
+          <p>새로 나온 프로그램이라 Windows가 한 번 확인해요. <b>추가 정보</b>를 누르고 <b>실행</b>을 눌러 주세요.</p>
+          <div class="pic">
+            <div class="smart" aria-label="Windows의 PC 보호 창 예시">
+              <b>Windows의 PC 보호</b>
+              <span>Microsoft Defender SmartScreen에서 인식할 수 없는 앱의 시작을 차단했습니다.</span>
+              <u class="hl">추가 정보</u>
+              <div class="row"><span class="run hl">실행</span><span>실행 안 함</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <span class="n">3</span>
+          <h3>설치하기 누르기</h3>
+          <p>바탕화면 바로가기와 자동 실행을 고르고 <b>설치하기</b>. 끝나면 바로 바탕화면에 깔려요.</p>
+          <div class="pic"><img src="img/installer.png" alt="PC 런처 설치 화면" loading="lazy" width="1520" height="960"></div>
+        </div>
+      </div>
+      <p class="note">업데이트는 따로 받지 않아도 돼요. 새 버전이 나오면 런처의 톱니바퀴에 빨간 점이 생기고, 설정 창에서 <b>업데이트</b>를 누르면 알아서 바뀌어요. 추가한 바로가기와 테마는 그대로 남아요.</p>
+    </div>
+  </section>
+
+  <section class="block" id="start">
+    <div class="wrap">
+      <p class="eyebrow">처음 쓰는 법</p>
+      <h2>이것만 알면 다 써요</h2>
+      <div class="tips">
+        <div class="tip"><span class="k">1</span><div><h3>게임 아이콘을 끌어다 놓기</h3><p>바탕화면이나 폴더의 게임 아이콘을 실행 패널로 끌어다 놓으면 추가돼요. <b>+ 추가</b>에서 직접 고를 수도 있어요.</p></div></div>
+        <div class="tip"><span class="k">2</span><div><h3>우클릭으로 정리</h3><p>아이콘을 우클릭하면 이름 바꾸기, 다른 탭으로 옮기기, 삭제. 실수로 지워도 <b>되돌리기</b>가 떠요.</p></div></div>
+        <div class="tip"><span class="k">3</span><div><h3>그냥 타이핑하면 검색</h3><p>어디서든 글자를 치면 검색창으로 가요. <kbd>Enter</kbd>로 실행, <kbd>Ctrl</kbd>+<kbd>1</kbd>~<kbd>6</kbd>로 탭 이동, <kbd>Esc</kbd>로 지우기.</p></div></div>
+        <div class="tip"><span class="k">4</span><div><h3>톱니바퀴에서 꾸미기</h3><p>패널 오른쪽 위 톱니바퀴를 누르면 테마 · 검색 엔진 · 자동 실행 · 내 이미지를 바꿀 수 있어요.</p></div></div>
+        <div class="tip"><span class="k">5</span><div><h3>잠깐 숨기기</h3><p>설정의 <b>런처 숨기기</b>를 누르면 사라지고, 작업 표시줄 오른쪽 트레이의 하트 아이콘을 누르면 다시 나와요.</p></div></div>
+        <div class="tip"><span class="k">6</span><div><h3>추천 게임도 바로</h3><p><b>추천 게임</b> 탭에 PLAYDATE의 협동 게임 추천이 들어 있어요. 누르면 상점 페이지가 열려요.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="faq">
+    <div class="wrap">
+      <p class="eyebrow">자주 묻는 질문</p>
+      <h2>궁금한 점</h2>
+      <div class="faq">
+        <details><summary>“PC 보호” 경고가 뜨는데 괜찮나요?</summary><p>개인이 만든 새 프로그램이라 Windows가 아직 모르는 앱이라서 뜨는 경고예요. 이 페이지에서 받은 파일이라면 <b>추가 정보 → 실행</b>으로 설치하면 돼요. 업데이트할 때는 파일의 지문(SHA-256)을 확인한 뒤에만 실행해요.</p></details>
+        <details><summary>인터넷이 꼭 필요한가요?</summary><p>런처는 인터넷 없이도 동작해요. 새 버전 확인(6시간에 한 번)과, 아주 오래된 Windows 10에서 WebView2를 처음 설치할 때만 인터넷을 써요.</p></details>
+        <details><summary>제 정보를 어디로 보내나요?</summary><p>보내지 않아요. 바로가기 목록과 설정은 이 PC에만 저장돼요. 새 버전 확인 때 이 사이트의 버전 파일 하나만 읽어요.</p></details>
+        <details><summary>컴퓨터가 느려지지 않나요?</summary><p>가만히 있을 때 CPU는 거의 쓰지 않고, 메모리는 웹 브라우저 탭 하나 정도(약 110MB)예요. 게임을 켜면 런처는 그 아래에 조용히 깔려 있어요.</p></details>
+        <details><summary>어떻게 지우나요?</summary><p>Windows <b>설정 › 앱 › 설치된 앱</b>에서 “PC 런처”를 찾아 제거하면 돼요. 바로가기와 자동 실행까지 깔끔하게 지워지고, 원하면 설정 데이터도 함께 지울 수 있어요.</p></details>
+        <details><summary>맥이나 휴대폰에서도 되나요?</summary><p>지금은 Windows 10 · 11 전용이에요.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="changes">
+    <div class="wrap">
+      <p class="eyebrow">업데이트 내역</p>
+      <h2>무엇이 바뀌었나요</h2>
+      <div class="changes" id="changes"><p class="sub">불러오는 중…</p></div>
+    </div>
+  </section>
+
+  <section class="block final">
+    <div class="wrap">
+      <h2>지금 바탕화면을 바꿔 보세요</h2>
+      <p class="sub">무료 · Windows 10 · 11</p>
+      <div class="cta">
+        <a class="btn primary" href="PCLauncher-Setup.exe" download data-download><svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>무료로 받기</a>
+        <a class="btn ghost" href="../">협동 게임 추천 보러 가기</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-in">
+    <span>PC 런처 · PLAYDATE</span>
+    <span>Windows는 Microsoft의 상표입니다. 이 앱은 Microsoft와 관련이 없습니다.</span>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const esc = s => String(s).replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
+  const root = document.documentElement;
+
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const t = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = t;
+    try { localStorage.setItem('playdate-theme', t); } catch (e) {}
+  });
+
+  // 최신 버전 정보: 버전 · 크기 · 날짜와 업데이트 내역을 채운다
+  fetch('latest.json', { cache: 'no-store' })
+    .then(r => (r.ok ? r.json() : Promise.reject()))
+    .then(latest => {
+      const mb = latest.size ? `${(latest.size / 1048576).toFixed(1)}MB` : '';
+      document.getElementById('meta').innerHTML =
+        `버전 ${esc(latest.version)} &nbsp;·&nbsp; ${esc(mb)} &nbsp;·&nbsp; Windows 10 · 11 &nbsp;·&nbsp; 관리자 권한 필요 없음`;
+      const history = Array.isArray(latest.history) && latest.history.length ? latest.history : [latest];
+      document.getElementById('changes').innerHTML = history.map((h, i) => `
+        <div class="change${i === 0 ? ' latest' : ''}">
+          <div class="v">${esc(h.version)}${i === 0 ? ' · 최신' : ''}<span class="d">${esc(h.date || '')}</span></div>
+          <ul>${(h.notes || []).map(n => `<li>${esc(n)}</li>`).join('')}</ul>
+        </div>`).join('');
+    })
+    .catch(() => {
+      document.getElementById('changes').innerHTML = '<p class="sub">업데이트 내역을 불러오지 못했어요.</p>';
+    });
+})();
+</script>
+</body>
+</html>
